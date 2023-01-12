@@ -1,18 +1,34 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Card, Button } from 'react-bootstrap';
+import { useAuth } from '../contexts/AuthContext';
 
 const Signin = () => {
+    const navigate = useNavigate();
+
     const emailRef = useRef<HTMLInputElement>(null);
     const pwdRef = useRef<HTMLInputElement>(null);
 
-    const [email, setEmail] = useState<string>('');
-    const [pwd, setPwd] = useState<string>('');
+    const [user, setUser] = useState();
+
+    const { login } = useAuth();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setEmail(emailRef.current?.value as string);
-        setPwd(pwdRef.current?.value as string);
+
+        if (!emailRef.current || !pwdRef.current) {
+            console.log('email or password is null');
+            return;
+        }
+
+        setUser(login(emailRef.current.value, pwdRef.current.value));
     };
+
+    useEffect(() => {
+        if (user) {
+            navigate('/home');
+        }
+    }, [user]);
 
     return (
         <>
@@ -32,8 +48,6 @@ const Signin = () => {
                             Sign In
                         </Button>
                     </Form>
-                    <p>email: {email}</p>
-                    <p>pwd: {pwd}</p>
                 </Card.Body>
             </Card>
         </>
