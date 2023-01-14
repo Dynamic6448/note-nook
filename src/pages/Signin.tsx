@@ -32,7 +32,7 @@ const Signin: React.FC = () => {
     }, [user]);
 
     return (
-        <Page>
+        <Page className='d-flex flex-column items-center justify-content-center' style={{ maxWidth: '400px' }}>
             <Card>
                 <Card.Header className='text-center'>Sign In</Card.Header>
                 <Card.Body>

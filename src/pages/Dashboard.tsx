@@ -21,12 +21,14 @@ const Dashboard: React.FC = () => {
 
     return (
         <Page>
-            {notes.map((note) => (
-                <Card key={note.id}>
-                    <Card.Header className='text-center'>{note.Title}</Card.Header>
-                    <Card.Body>{note.Note}</Card.Body>
-                </Card>
-            ))}
+            <div className='d-flex flex-row align-items-center justify-content-center m-4'>
+                {notes.map((note) => (
+                    <Card key={note.id} style={{ maxWidth: '400px' }}>
+                        <Card.Header className='text-center'>{note.Title}</Card.Header>
+                        <Card.Body>{note.Note}</Card.Body>
+                    </Card>
+                ))}
+            </div>
         </Page>
     );
 };
