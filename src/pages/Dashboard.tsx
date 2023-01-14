@@ -5,25 +5,28 @@ import { db } from '../firebase';
 import Page from '.';
 
 const Dashboard: React.FC = () => {
-    const [notes, setNotes] = useState<Object[]>([]);
+    const [notes, setNotes] = useState([] as any);
 
-    const notesCollection = collection(db, 'notes');
+    const notesCollection = collection(db, 'Notes');
 
     useEffect(() => {
         const getNotes = async () => {
             const data = await getDocs(notesCollection);
             setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            console.log(notes);
         };
 
         getNotes();
-    }, [notesCollection]);
+    }, []);
 
     return (
         <Page>
-            <Card>
-                <Card.Header className='text-center'>Note Sample</Card.Header>
-                <Card.Body>body</Card.Body>
-            </Card>
+            {notes.map((note) => (
+                <Card key={note.id}>
+                    <Card.Header className='text-center'>{note.Title}</Card.Header>
+                    <Card.Body>{note.Note}</Card.Body>
+                </Card>
+            ))}
         </Page>
     );
 };
