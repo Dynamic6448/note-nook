@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Signin from './pages/Signin';
-import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
 import { AuthProvider } from './contexts/AuthContext';
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
                         <Routes>
                             <Route path='/' element={<Signin />} />
                             <Route path='/login' element={<Signin />} />
-                            <Route path='/home' element={<Home />} />
+                            <Route path='/dashboard' element={<Dashboard />} />
                         </Routes>
                     </Router>
                 </div>

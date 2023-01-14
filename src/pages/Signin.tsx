@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Card, Button } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
+import Page from '.';
 
-const Signin = () => {
+const Signin: React.FC = () => {
     const navigate = useNavigate();
 
     const emailRef = useRef<HTMLInputElement>(null);
@@ -26,15 +27,15 @@ const Signin = () => {
 
     useEffect(() => {
         if (user) {
-            navigate('/home');
+            navigate('/dashboard');
         }
     }, [user]);
 
     return (
-        <>
+        <Page>
             <Card>
+                <Card.Header className='text-center'>Sign In</Card.Header>
                 <Card.Body>
-                    <h2 className='text-center mb-4'>Sign In</h2>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group id='email'>
                             <Form.Label>Email</Form.Label>
@@ -50,7 +51,7 @@ const Signin = () => {
                     </Form>
                 </Card.Body>
             </Card>
-        </>
+        </Page>
     );
 };
 
