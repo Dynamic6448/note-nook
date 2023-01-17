@@ -8,7 +8,7 @@ import { AuthProvider } from './contexts/AuthContext';
 const App: React.FC = () => {
     return (
         <AuthProvider>
-            <Container style={{ minHeight: '100vh', maxWidth: '100vh' }}>
+            <Container>
                 <Router>
                     <Routes>
                         <Route path='/' element={<Signin />} />
