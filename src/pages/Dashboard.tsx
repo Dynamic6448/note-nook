@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Card } from 'react-bootstrap';
-import { collection, getDocs } from 'firebase/firestore';
+import { Button, Card } from 'react-bootstrap';
+import { collection, getDocs, deleteDoc } from 'firebase/firestore';
+import CreateNotePopup from '../components/CreateNotePopup';
 import { db } from '../firebase';
 import Page from '.';
-import CreateNotePopup from '../components/CreateNotePopup';
 
 const Dashboard: React.FC = () => {
     const [notes, setNotes] = useState([] as any);
@@ -17,7 +17,6 @@ const Dashboard: React.FC = () => {
             //filter data by most recent
             //data = data.sort((a, b) => b.data().createdAt - a.data().createdAt);
             setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-            console.log(notes);
         };
 
         getNotes();
@@ -32,7 +31,23 @@ const Dashboard: React.FC = () => {
             <div className='d-flex flex-row mt-4'>
                 {notes.map((note) => (
                     <Card key={note.id} style={{ maxWidth: '400px' }}>
-                        <Card.Header className='text-center'>{note.Title}</Card.Header>
+                        <Card.Header className='text-center d-flex flex-row justify-content-between align-items-center'>
+                            {note.Title}
+
+                            <Button
+                                variant='secondary'
+                                onClick={async () => {
+                                    const data = await getDocs(notesCollection);
+                                    const doc = data.docs.find((d) => d.id === note.id);
+
+                                    if (!doc) return;
+
+                                    console.log(doc.data);
+                                }}
+                            >
+                                nah
+                            </Button>
+                        </Card.Header>
                         <Card.Body>{note.Note}</Card.Body>
                     </Card>
                 ))}
