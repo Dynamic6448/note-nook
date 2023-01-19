@@ -1,3 +1,3 @@
-# Learning Firebase
+# Note Nook
 
-A simple react app for me to learn firebase and authentication stuff
+A note-taking application that I'm designing in order to learn Firebase authentication and databases
