@@ -1,5 +1,5 @@
 {
-    "name": "learn-firebase",
+    "name": "note-nook",
     "version": "0.1.0",
     "scripts": {
         "start": "react-scripts start"
