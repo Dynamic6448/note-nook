@@ -20,32 +20,31 @@ const Dashboard: React.FC = () => {
         };
 
         getNotes();
-    }, [notes]);
+    }, []);
 
     const handleShowPopup = () => {
         setShowCreateNotePopup(!showCreateNotePopup);
     };
 
+    const handleDeleteNote = async (id: string) => {
+        const data = await getDocs(notesCollection);
+        const doc = data.docs.find((d) => d.id === id);
+
+        if (!doc) return;
+
+        deleteDoc(doc.ref);
+    };
+
     return (
         <Page>
-            <div className='d-flex flex-row mt-4'>
+            <div className='d-flex flex-row mt-4' style={{ flexWrap: 'wrap' }}>
                 {notes.map((note) => (
-                    <Card key={note.id} style={{ maxWidth: '400px' }}>
+                    <Card key={note.id} className='mb-4' style={{ width: '400px' }}>
                         <Card.Header className='text-center d-flex flex-row justify-content-between align-items-center'>
                             {note.Title}
 
-                            <Button
-                                variant='secondary'
-                                onClick={async () => {
-                                    const data = await getDocs(notesCollection);
-                                    const doc = data.docs.find((d) => d.id === note.id);
-
-                                    if (!doc) return;
-
-                                    console.log(doc.data);
-                                }}
-                            >
-                                nah
+                            <Button variant='danger' onClick={() => handleDeleteNote(note.id)}>
+                                Delete
                             </Button>
                         </Card.Header>
                         <Card.Body>{note.Note}</Card.Body>
