@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Button } from '@material-tailwind/react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -33,32 +33,33 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
     };
 
     return (
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>Create Note</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <Form.Group className='mb-3' controlId='formBasicEmail'>
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control type='text' placeholder='Enter title' onChange={handleTitleChange} />
-                    </Form.Group>
+        <div></div>
+        // <Modal show={show} onHide={handleClose}>
+        //     <Modal.Header closeButton>
+        //         <Modal.Title>Create Note</Modal.Title>
+        //     </Modal.Header>
+        //     <Modal.Body>
+        //         <Form>
+        //             <Form.Group className='mb-3' controlId='formBasicEmail'>
+        //                 <Form.Label>Title</Form.Label>
+        //                 <Form.Control type='text' placeholder='Enter title' onChange={handleTitleChange} />
+        //             </Form.Group>
 
-                    <Form.Group className='mb-3' controlId='formBasicPassword'>
-                        <Form.Label>Note</Form.Label>
-                        <Form.Control as='textarea' placeholder='Enter note' onChange={handleNoteChange} />
-                    </Form.Group>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant='secondary' onClick={handleClose}>
-                    Close
-                </Button>
-                <Button variant='primary' onClick={handleSubmit}>
-                    Save Changes
-                </Button>
-            </Modal.Footer>
-        </Modal>
+        //             <Form.Group className='mb-3' controlId='formBasicPassword'>
+        //                 <Form.Label>Note</Form.Label>
+        //                 <Form.Control as='textarea' placeholder='Enter note' onChange={handleNoteChange} />
+        //             </Form.Group>
+        //         </Form>
+        //     </Modal.Body>
+        //     <Modal.Footer>
+        //         <Button variant='secondary' onClick={handleClose}>
+        //             Close
+        //         </Button>
+        //         <Button variant='primary' onClick={handleSubmit}>
+        //             Save Changes
+        //         </Button>
+        //     </Modal.Footer>
+        // </Modal>
     );
 };
 

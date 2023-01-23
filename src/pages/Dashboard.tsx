@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, CardHeader, CardBody } from '@material-tailwind/react';
 import { collection, getDocs, deleteDoc } from 'firebase/firestore';
 import CreateNotePopup from '../components/CreateNotePopup';
 import { db } from '../firebase';
@@ -7,6 +7,7 @@ import Page from '.';
 
 const Dashboard: React.FC = () => {
     const [notes, setNotes] = useState([] as any);
+    const [numNotes, setNumNotes] = useState(0);
     const [showCreateNotePopup, setShowCreateNotePopup] = useState(false);
 
     const notesCollection = collection(db, 'Notes');
@@ -14,16 +15,16 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         const getNotes = async () => {
             let data = await getDocs(notesCollection);
-            //filter data by most recent
-            //data = data.sort((a, b) => b.data().createdAt - a.data().createdAt);
             setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         };
 
         getNotes();
-    }, []);
+    }, [numNotes]);
 
     const handleShowPopup = () => {
         setShowCreateNotePopup(!showCreateNotePopup);
+
+        setNumNotes(numNotes + 1);
     };
 
     const handleDeleteNote = async (id: string) => {
@@ -33,27 +34,29 @@ const Dashboard: React.FC = () => {
         if (!doc) return;
 
         deleteDoc(doc.ref);
+
+        setNumNotes(numNotes + 1);
     };
 
     return (
         <Page>
-            <div className='d-flex flex-row mt-4' style={{ flexWrap: 'wrap' }}>
+            <div className='flex flex-row flex-wrap mt-4'>
                 {notes.map((note) => (
-                    <Card key={note.id} className='mb-4' style={{ width: '400px' }}>
-                        <Card.Header className='text-center d-flex flex-row justify-content-between align-items-center'>
+                    <Card key={note.id} className='mb-4 w-[400px]'>
+                        <CardHeader className='text-center flex flex-row justify-between items-center'>
                             {note.Title}
 
-                            <Button variant='danger' onClick={() => handleDeleteNote(note.id)}>
+                            <Button color='red' onClick={() => handleDeleteNote(note.id)}>
                                 Delete
                             </Button>
-                        </Card.Header>
-                        <Card.Body>{note.Note}</Card.Body>
+                        </CardHeader>
+                        <CardBody>{note.Note}</CardBody>
                     </Card>
                 ))}
             </div>
 
             {/* button to create a note */}
-            <div className='absolute top-100'>
+            <div className='absolute'>
                 <button className='btn btn-primary' onClick={handleShowPopup}>
                     Create Note
                 </button>
