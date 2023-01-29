@@ -24,10 +24,10 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
         e.preventDefault();
 
         // add note to firebase db
-        addDoc(collection(db, 'Notes'), {
-            Title: title,
-            Note: note,
-        });
+        // addDoc(collection(db, 'Notes'), {
+        //     Title: title,
+        //     Note: note,
+        // });
 
         handleClose();
     };

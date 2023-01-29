@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardHeader, CardBody } from '@material-tailwind/react';
-import { collection, getDocs, deleteDoc } from 'firebase/firestore';
 import CreateNotePopup from '../components/CreateNotePopup';
 import { db } from '../firebase';
 import Page from '.';
@@ -10,12 +9,12 @@ const Dashboard: React.FC = () => {
     const [numNotes, setNumNotes] = useState(0);
     const [showCreateNotePopup, setShowCreateNotePopup] = useState(false);
 
-    const notesCollection = collection(db, 'Notes');
+    //const notesCollection = collection(db, 'Notes');
 
     useEffect(() => {
         const getNotes = async () => {
-            let data = await getDocs(notesCollection);
-            setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            //let data = await getDocs(notesCollection);
+            //setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         };
 
         getNotes();
@@ -28,12 +27,12 @@ const Dashboard: React.FC = () => {
     };
 
     const handleDeleteNote = async (id: string) => {
-        const data = await getDocs(notesCollection);
-        const doc = data.docs.find((d) => d.id === id);
+        //const data = await getDocs(notesCollection);
+        //const doc = data.docs.find((d) => d.id === id);
 
-        if (!doc) return;
+        //if (!doc) return;
 
-        deleteDoc(doc.ref);
+        //deleteDoc(doc.ref);
 
         setNumNotes(numNotes + 1);
     };
