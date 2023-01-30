@@ -19,7 +19,7 @@ export default app;
 
 // create note method
 export const createNote = (title: string, note: string) => {
-    push(ref(db, `users/${auth.currentUser?.uid}/notes/${title}`), {
+    push(ref(db, `users/${auth.currentUser?.uid}/notes`), {
         title,
         note,
     });

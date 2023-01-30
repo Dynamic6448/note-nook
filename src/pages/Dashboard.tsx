@@ -56,8 +56,8 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* button to create a note */}
-            <div className='absolute'>
-                <button className='btn btn-primary' onClick={handleShowPopup}>
+            <div className=''>
+                <button className='p-3 bg-blue-500 rounded-full text-white' onClick={handleShowPopup}>
                     Create Note
                 </button>
             </div>

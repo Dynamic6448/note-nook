@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { createNote, db } from '../firebase';
 
 interface CreateNotePopupProps {
     show: boolean;
@@ -15,54 +15,55 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
         setTitle(e.target.value);
     };
 
-    const handleNoteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNote(e.target.value);
     };
 
-    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
-
-        // add note to firebase db
-        // addDoc(collection(db, 'Notes'), {
-        //     Title: title,
-        //     Note: note,
-        // });
+    const handleSubmit = () => {
+        createNote(title, note);
 
         handleClose();
     };
 
     return (
-        <div className='bg-black bg-opacity-25 w-full h-full'>
-            <div>
-                <h1 className='text-xl font-medium mb-6'>Create Note</h1>
-            </div>
+        <div>
+            {show && (
+                <div className='absolute top-0 left-0 flex items-center justify-center bg-black bg-opacity-50 transition w-full h-full'>
+                    <div className='bg-white rounded-2xl'>
+                        <div className='flex flex-col justify-between p-6 w-full h-full'>
+                            <h1 className='text-2xl font-medium mb-6'>Create Note</h1>
+                            <div className='mb-6'>
+                                <input
+                                    type='text'
+                                    placeholder='Title'
+                                    className='w-full p-2 border-2 border-gray-300 rounded-xl mb-4'
+                                    onChange={handleTitleChange}
+                                />
+                                <textarea
+                                    placeholder='Note'
+                                    className='w-full p-2 border-2 border-gray-300 rounded-xl'
+                                    onChange={handleNoteChange}
+                                />
+                            </div>
+                            <div className='flex flex-row w-full items-center justify-between'>
+                                <button
+                                    className='py-2 px-4 bg-slate-600 hover:bg-slate-700 transition text-white rounded-full'
+                                    onClick={handleClose}
+                                >
+                                    Close
+                                </button>
+                                <button
+                                    className='py-2 px-4 bg-blue-600 hover:bg-blue-700 transition text-white rounded-full'
+                                    onClick={handleSubmit}
+                                >
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-        // <Modal show={show} onHide={handleClose}>
-        //     <Modal.Header closeButton>
-        //         <Modal.Title>Create Note</Modal.Title>
-        //     </Modal.Header>
-        //     <Modal.Body>
-        //         <Form>
-        //             <Form.Group className='mb-3' controlId='formBasicEmail'>
-        //                 <Form.Label>Title</Form.Label>
-        //                 <Form.Control type='text' placeholder='Enter title' onChange={handleTitleChange} />
-        //             </Form.Group>
-
-        //             <Form.Group className='mb-3' controlId='formBasicPassword'>
-        //                 <Form.Label>Note</Form.Label>
-        //                 <Form.Control as='textarea' placeholder='Enter note' onChange={handleNoteChange} />
-        //             </Form.Group>
-        //         </Form>
-        //     </Modal.Body>
-        //     <Modal.Footer>
-        //         <Button variant='secondary' onClick={handleClose}>
-        //             Close
-        //         </Button>
-        //         <Button variant='primary' onClick={handleSubmit}>
-        //             Save Changes
-        //         </Button>
-        //     </Modal.Footer>
-        // </Modal>
     );
 };
 
