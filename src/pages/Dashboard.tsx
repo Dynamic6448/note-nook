@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, CardHeader, CardBody } from '@material-tailwind/react';
 import CreateNotePopup from '../components/CreateNotePopup';
 import { db } from '../firebase';
 import Page from '.';
@@ -40,7 +39,7 @@ const Dashboard: React.FC = () => {
     return (
         <Page>
             <div className='flex flex-row flex-wrap mt-4'>
-                {notes.map((note) => (
+                {/* {notes.map((note) => (
                     <Card key={note.id} className='mb-4 w-[400px]'>
                         <CardHeader className='text-center flex flex-row justify-between items-center'>
                             {note.Title}
@@ -51,7 +50,7 @@ const Dashboard: React.FC = () => {
                         </CardHeader>
                         <CardBody>{note.Note}</CardBody>
                     </Card>
-                ))}
+                ))} */}
             </div>
 
             {/* button to create a note */}
