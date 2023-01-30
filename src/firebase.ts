@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getDatabase, push, ref } from 'firebase/database';
+import { getDatabase, push, ref, remove } from 'firebase/database';
 
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -27,4 +27,8 @@ export const createNote = (title: string, note: string) => {
 
 export const readNotes = () => {
     return ref(db, `users/${auth.currentUser?.uid}/notes`);
+};
+
+export const deleteNote = (id: string) => {
+    remove(ref(db, `users/${auth.currentUser?.uid}/notes/${id}`));
 };
