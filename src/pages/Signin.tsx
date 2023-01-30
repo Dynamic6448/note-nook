@@ -7,21 +7,20 @@ import Page from '.';
 const Signin: React.FC = () => {
     const navigate = useNavigate();
 
-    const emailRef = useRef<HTMLInputElement>(null);
-    const pwdRef = useRef<HTMLInputElement>(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const [user, setUser] = useState();
 
     const { login } = useAuth();
 
     const handleSubmit = () => {
-        // if (!emailRef.current || !pwdRef.current) {
-        //     console.log('email or password is null');
-        //     return;
-        // }
+        if (email.length === 0 || password.length === 0) {
+            console.log('email or password is empty');
+            return;
+        }
 
-        // setUser(login(emailRef.current.value, pwdRef.current.value));
-        console.log(emailRef.current?.value, pwdRef.current?.value);
+        setUser(login(email, password));
     };
 
     useEffect(() => {
@@ -31,26 +30,38 @@ const Signin: React.FC = () => {
     }, [user]);
 
     return (
-        <Page className='flex items-center justify-center w-full h-full'>
-            <Card className='flex flex-col items-center w-[400px]'>
-                <CardHeader color='blue' className='w-[300px] grid place-items-center p-4'>
-                    <p className='text-slate-100 font-bold text-xl'>Sign In</p>
-                </CardHeader>
-
-                <CardBody className='w-full'>
-                    <form className='flex flex-col gap-4 w-full'>
-                        <Input type='email' label='Email' color='blue' ref={emailRef} />
-                        <Input type='password' label='Password' color='blue' ref={pwdRef} />
-                    </form>
-                </CardBody>
-
-                <CardFooter className='w-full'>
-                    <Button className='bg-blue-500' variant='gradient' fullWidth onClick={handleSubmit}>
-                        Sign In
-                    </Button>
-                </CardFooter>
-            </Card>
-        </Page>
+        <div className='flex items-center justify-center w-full h-full'>
+            <div className='bg-white p-6 rounded-lg shadow-md w-[400px]'>
+                <h2 className='text-lg font-medium mb-4'>Login</h2>
+                <div className='mb-4'>
+                    <label className='block mb-2 font-medium' htmlFor='username'>
+                        Username
+                    </label>
+                    <input
+                        className='border p-2 w-full'
+                        type='email'
+                        id='username'
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                    />
+                </div>
+                <div className='mb-4'>
+                    <label className='block mb-2 font-medium' htmlFor='password'>
+                        Password
+                    </label>
+                    <input
+                        className='border p-2 w-full'
+                        type='password'
+                        id='password'
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                    />
+                </div>
+                <button className='bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600' onClick={handleSubmit}>
+                    Login
+                </button>
+            </div>
+        </div>
     );
 };
 
