@@ -32,7 +32,11 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
     };
 
     return (
-        <div></div>
+        <div className='bg-black bg-opacity-25 w-full h-full'>
+            <div>
+                <h1 className='text-xl font-medium mb-6'>Create Note</h1>
+            </div>
+        </div>
         // <Modal show={show} onHide={handleClose}>
         //     <Modal.Header closeButton>
         //         <Modal.Title>Create Note</Modal.Title>

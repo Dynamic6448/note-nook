@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import CreateNotePopup from '../components/CreateNotePopup';
 import { db } from '../firebase';
 import Page from '.';
+import { Card, CardBody, CardHeader } from '../components/Card';
+import { onValue } from 'firebase/database';
 
 const Dashboard: React.FC = () => {
     const [notes, setNotes] = useState([] as any);
@@ -39,18 +41,18 @@ const Dashboard: React.FC = () => {
     return (
         <Page>
             <div className='flex flex-row flex-wrap mt-4'>
-                {/* {notes.map((note) => (
+                {notes.map((note) => (
                     <Card key={note.id} className='mb-4 w-[400px]'>
                         <CardHeader className='text-center flex flex-row justify-between items-center'>
                             {note.Title}
 
-                            <Button color='red' onClick={() => handleDeleteNote(note.id)}>
+                            <button className='bg-red' onClick={() => handleDeleteNote(note.id)}>
                                 Delete
-                            </Button>
+                            </button>
                         </CardHeader>
                         <CardBody>{note.Note}</CardBody>
                     </Card>
-                ))} */}
+                ))}
             </div>
 
             {/* button to create a note */}

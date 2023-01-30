@@ -24,3 +24,7 @@ export const createNote = (title: string, note: string) => {
         note,
     });
 };
+
+export const readNotes = () => {
+    return ref(db, `users/${auth.currentUser?.uid}/notes`);
+};
