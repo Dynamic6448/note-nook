@@ -16,7 +16,10 @@ const Dashboard: React.FC = () => {
         onValue(readNotes(), (snapshot) => {
             const data = snapshot.val();
 
-            if (!snapshot.exists()) return;
+            if (!snapshot.exists()) {
+                setNotes([]);
+                return;
+            }
 
             const noteArr: any = [];
 
@@ -36,9 +39,9 @@ const Dashboard: React.FC = () => {
 
     return (
         <Page>
-            <div className='flex flex-row flex-wrap mt-4'>
+            <div className='flex flex-row flex-wrap p-4'>
                 {notes.map((note) => (
-                    <Card key={note[0]} className='mb-4 w-[400px]'>
+                    <Card key={note[0]} className='mb-4 w-[400px] h-[200px]'>
                         <CardHeader className='text-center flex flex-row justify-between items-center'>
                             {note[1].title}
 
@@ -49,7 +52,7 @@ const Dashboard: React.FC = () => {
                                 Delete
                             </button>
                         </CardHeader>
-                        <CardBody>{note[1].note}</CardBody>
+                        <CardBody className='h-[100px] overflow-y-scroll'>{note[1].note}</CardBody>
                     </Card>
                 ))}
             </div>

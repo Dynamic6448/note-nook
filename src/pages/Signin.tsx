@@ -39,19 +39,19 @@ const Signin: React.FC = () => {
                             Username
                         </label>
                         <input
-                            className='border p-2 w-full'
+                            className='border p-2 w-full rounded-md'
                             type='email'
                             id='username'
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                         />
                     </div>
-                    <div className='mb-4'>
+                    <div className='mb-6'>
                         <label className='block mb-2 font-medium' htmlFor='password'>
                             Password
                         </label>
                         <input
-                            className='border p-2 w-full'
+                            className='border p-2 w-full rounded-md'
                             type='password'
                             id='password'
                             value={password}
