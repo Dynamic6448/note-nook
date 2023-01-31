@@ -31,10 +31,14 @@ const Dashboard: React.FC = () => {
         });
     }, []);
 
-    const handleShowPopup = () => {
+    const handleShowCreateModal = () => {
         setShowCreateNotePopup(!showCreateNotePopup);
 
         setNumNotes(numNotes + 1);
+    };
+
+    const handleShowEditModal = () => {
+        console.log('edit note');
     };
 
     return (
@@ -45,12 +49,20 @@ const Dashboard: React.FC = () => {
                         <CardHeader className='text-center flex flex-row justify-between items-center'>
                             {note[1].title}
 
-                            <button
-                                className='py-2 px-3 rounded-full bg-red-600 hover:bg-red-700 hover:shadow-md transition text-white text-sm'
-                                onClick={() => deleteNote(note[0])}
-                            >
-                                Delete
-                            </button>
+                            <div className='flex flex-row gap-2'>
+                                <button
+                                    className='py-2 px-3 rounded-full bg-orange-600 hover:bg-orange-700 hover:shadow-md transition text-white text-sm'
+                                    onClick={handleShowEditModal}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className='py-2 px-3 rounded-full bg-red-600 hover:bg-red-700 hover:shadow-md transition text-white text-sm'
+                                    onClick={() => deleteNote(note[0])}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </CardHeader>
                         <CardBody className='h-[100px] overflow-y-scroll'>{note[1].note}</CardBody>
                     </Card>
@@ -59,12 +71,12 @@ const Dashboard: React.FC = () => {
 
             <button
                 className='fixed right-6 bottom-6 py-3 px-4 bg-blue-500 hover:bg-blue-600 transition rounded-full text-white'
-                onClick={handleShowPopup}
+                onClick={handleShowCreateModal}
             >
                 Create Note
             </button>
 
-            <CreateNotePopup show={showCreateNotePopup} handleClose={handleShowPopup} />
+            <CreateNotePopup show={showCreateNotePopup} handleClose={handleShowCreateModal} />
         </Page>
     );
 };
