@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import CreateNotePopup from '../components/CreateNotePopup';
-import { deleteNote, readNotes } from '../firebase';
-import Page from '.';
-import { Card, CardBody, CardHeader } from '../components/Card';
 import { onValue } from 'firebase/database';
+import { deleteNote, readNotes } from '../firebase';
+import { Card, CardBody, CardHeader } from '../components/Card';
+import Page from '.';
+import CreateNotePopup from '../components/CreateNotePopup';
+import EditNotePopup from '../components/EditNotePopup';
 
 const Dashboard: React.FC = () => {
     const [notes, setNotes] = useState([] as any);
-    const [numNotes, setNumNotes] = useState(0);
+    const [editNoteId, setEditNoteId] = useState('');
     const [showCreateNotePopup, setShowCreateNotePopup] = useState(false);
+    const [showEditNotePopup, setShowEditNotePopup] = useState(false);
 
     //const notesCollection = collection(db, 'Notes');
 
@@ -33,12 +35,12 @@ const Dashboard: React.FC = () => {
 
     const handleShowCreateModal = () => {
         setShowCreateNotePopup(!showCreateNotePopup);
-
-        setNumNotes(numNotes + 1);
     };
 
-    const handleShowEditModal = () => {
-        console.log('edit note');
+    const handleShowEditModal = (id: string) => {
+        setShowEditNotePopup(!showEditNotePopup);
+
+        if (showEditNotePopup) setEditNoteId(id);
     };
 
     return (
@@ -52,7 +54,7 @@ const Dashboard: React.FC = () => {
                             <div className='flex flex-row gap-2'>
                                 <button
                                     className='py-2 px-3 rounded-full bg-orange-600 hover:bg-orange-700 hover:shadow-md transition text-white text-sm'
-                                    onClick={handleShowEditModal}
+                                    onClick={() => handleShowEditModal(note[0])}
                                 >
                                     Edit
                                 </button>
@@ -77,6 +79,7 @@ const Dashboard: React.FC = () => {
             </button>
 
             <CreateNotePopup show={showCreateNotePopup} handleClose={handleShowCreateModal} />
+            <EditNotePopup id={editNoteId} show={showEditNotePopup} handleClose={() => handleShowEditModal(editNoteId)} />
         </Page>
     );
 };

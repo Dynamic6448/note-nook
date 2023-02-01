@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getDatabase, push, ref, remove } from 'firebase/database';
+import { getDatabase, push, ref, remove, set } from 'firebase/database';
 
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -27,6 +27,17 @@ export const createNote = (title: string, note: string) => {
 
 export const readNotes = () => {
     return ref(db, `users/${auth.currentUser?.uid}/notes`);
+};
+
+export const getNoteById = (id: string) => {
+    return ref(db, `users/${auth.currentUser?.uid}/notes/${id}`);
+};
+
+export const setNoteById = (id: string, title: string, note: string) => {
+    set(ref(db, `users/${auth.currentUser?.uid}/notes/${id}`), {
+        title,
+        note,
+    });
 };
 
 export const deleteNote = (id: string) => {

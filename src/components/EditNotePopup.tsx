@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
-import { createNote } from '../firebase';
+import React, { useEffect, useState } from 'react';
+import { createNote, getNoteById, setNoteById } from '../firebase';
 import { Modal } from './Modal';
+import { onValue } from 'firebase/database';
 
-interface CreateNotePopupProps {
+interface EditNotePopupProps {
+    id: string;
     show: boolean;
     handleClose: () => void;
 }
 
-const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) => {
+const EditNotePopup: React.FC<EditNotePopupProps> = ({ id, show, handleClose }) => {
     const [title, setTitle] = useState('');
     const [note, setNote] = useState('');
+
+    useEffect(() => {
+        onValue(getNoteById(id), (snapshot) => {
+            const data = snapshot.val();
+
+            if (!snapshot.exists()) return;
+
+            setTitle(data[1].title);
+            setNote(data[1].note);
+            console.log('ran');
+        });
+    }, []);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
@@ -20,13 +34,13 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
     };
 
     const handleSubmit = () => {
-        createNote(title, note);
+        setNoteById(id, title, note);
 
         handleClose();
     };
 
     return (
-        <Modal title='Create Note' show={show}>
+        <Modal title='Edit Note' show={show}>
             <div className='mb-6'>
                 <input
                     type='text'
@@ -51,11 +65,11 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
                     className='py-2 px-4 bg-blue-600 hover:bg-blue-700 transition text-white rounded-full'
                     onClick={handleSubmit}
                 >
-                    Create
+                    Save
                 </button>
             </div>
         </Modal>
     );
 };
 
-export default CreateNotePopup;
+export default EditNotePopup;
