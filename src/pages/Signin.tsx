@@ -41,7 +41,6 @@ const Signin: React.FC = () => {
                         <input
                             className='border p-2 w-full rounded-md'
                             type='email'
-                            id='username'
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                         />
@@ -53,7 +52,6 @@ const Signin: React.FC = () => {
                         <input
                             className='border p-2 w-full rounded-md'
                             type='password'
-                            id='password'
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
                         />

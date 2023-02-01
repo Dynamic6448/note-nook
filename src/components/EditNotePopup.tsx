@@ -1,41 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { createNote, getNoteById, setNoteById } from '../firebase';
+import { getCurrentEditingNoteId, getNoteById, setNoteById } from '../firebase';
 import { Modal } from './Modal';
 import { onValue } from 'firebase/database';
 
 interface EditNotePopupProps {
-    id: string;
     show: boolean;
     handleClose: () => void;
 }
 
-const EditNotePopup: React.FC<EditNotePopupProps> = ({ id, show, handleClose }) => {
+const EditNotePopup: React.FC<EditNotePopupProps> = ({ show, handleClose }) => {
     const [title, setTitle] = useState('');
     const [note, setNote] = useState('');
 
     useEffect(() => {
-        onValue(getNoteById(id), (snapshot) => {
-            const data = snapshot.val();
+        const noteObj = getNoteById(getCurrentEditingNoteId());
 
-            if (!snapshot.exists()) return;
+        if (!noteObj) return;
 
-            setTitle(data[1].title);
-            setNote(data[1].note);
-            console.log('ran');
-        });
-    }, []);
-
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
-
-    const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setNote(e.target.value);
-    };
+        setTitle(noteObj.title);
+        setNote(noteObj.note);
+    }, [show]);
 
     const handleSubmit = () => {
-        setNoteById(id, title, note);
-
+        setNoteById(getCurrentEditingNoteId(), title, note);
         handleClose();
     };
 
@@ -43,15 +30,17 @@ const EditNotePopup: React.FC<EditNotePopupProps> = ({ id, show, handleClose }) 
         <Modal title='Edit Note' show={show}>
             <div className='mb-6'>
                 <input
+                    className='w-full p-2 border-2 border-gray-300 rounded-xl mb-4'
                     type='text'
                     placeholder='Title'
-                    className='w-full p-2 border-2 border-gray-300 rounded-xl mb-4'
-                    onChange={handleTitleChange}
+                    value={title}
+                    onChange={(event) => setTitle(event.target.value)}
                 />
                 <textarea
-                    placeholder='Note'
                     className='w-full p-2 border-2 border-gray-300 rounded-xl'
-                    onChange={handleNoteChange}
+                    placeholder='Note'
+                    value={note}
+                    onChange={(event) => setNote(event.target.value)}
                 />
             </div>
             <div className='flex flex-row w-full items-center justify-between'>

@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getDatabase, push, ref, remove, set } from 'firebase/database';
+import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
 
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -29,8 +29,20 @@ export const readNotes = () => {
     return ref(db, `users/${auth.currentUser?.uid}/notes`);
 };
 
-export const getNoteById = (id: string) => {
-    return ref(db, `users/${auth.currentUser?.uid}/notes/${id}`);
+export const getNoteById: any = (id: string) => {
+    let returnVal = null;
+
+    onValue(readNotes(), (snapshot) => {
+        const data = snapshot.val();
+
+        if (!snapshot.exists()) return;
+
+        Object.entries(data).map((note: any) => {
+            if (note[0] === id) returnVal = note[1];
+        });
+    });
+
+    return returnVal;
 };
 
 export const setNoteById = (id: string, title: string, note: string) => {
@@ -42,4 +54,14 @@ export const setNoteById = (id: string, title: string, note: string) => {
 
 export const deleteNote = (id: string) => {
     remove(ref(db, `users/${auth.currentUser?.uid}/notes/${id}`));
+};
+
+let currentEditingNoteId: string = '';
+
+export const setCurrentEditingNoteId = (id: string) => {
+    currentEditingNoteId = id;
+};
+
+export const getCurrentEditingNoteId = () => {
+    return currentEditingNoteId;
 };

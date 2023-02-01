@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { onValue } from 'firebase/database';
-import { deleteNote, readNotes } from '../firebase';
+import { deleteNote, getCurrentEditingNoteId, readNotes, setCurrentEditingNoteId } from '../firebase';
 import { Card, CardBody, CardHeader } from '../components/Card';
 import Page from '.';
 import CreateNotePopup from '../components/CreateNotePopup';
@@ -8,7 +8,6 @@ import EditNotePopup from '../components/EditNotePopup';
 
 const Dashboard: React.FC = () => {
     const [notes, setNotes] = useState([] as any);
-    const [editNoteId, setEditNoteId] = useState('');
     const [showCreateNotePopup, setShowCreateNotePopup] = useState(false);
     const [showEditNotePopup, setShowEditNotePopup] = useState(false);
 
@@ -38,9 +37,8 @@ const Dashboard: React.FC = () => {
     };
 
     const handleShowEditModal = (id: string) => {
+        setCurrentEditingNoteId(id);
         setShowEditNotePopup(!showEditNotePopup);
-
-        if (showEditNotePopup) setEditNoteId(id);
     };
 
     return (
@@ -79,7 +77,7 @@ const Dashboard: React.FC = () => {
             </button>
 
             <CreateNotePopup show={showCreateNotePopup} handleClose={handleShowCreateModal} />
-            <EditNotePopup id={editNoteId} show={showEditNotePopup} handleClose={() => handleShowEditModal(editNoteId)} />
+            <EditNotePopup show={showEditNotePopup} handleClose={() => handleShowEditModal(getCurrentEditingNoteId())} />
         </Page>
     );
 };
