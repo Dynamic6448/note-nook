@@ -19,3 +19,7 @@ export const CardHeader: React.FC<CardProps> = ({ className, children }) => {
 export const CardBody: React.FC<CardProps> = ({ className = '', children }) => {
     return <div className={`mb-4 ${className}`}>{children}</div>;
 };
+
+export const CardFooter: React.FC<CardProps> = ({ className = '', children }) => {
+    return <div className={`text-md ${className}`}>{children}</div>;
+};
