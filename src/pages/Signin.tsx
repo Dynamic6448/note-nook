@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Page from '.';
 import { Card, CardBody, CardFooter, CardHeader } from '../components/Card';
+import { Button } from '../components/Button';
 
 const Signin: React.FC = () => {
     const navigate = useNavigate();
@@ -60,16 +61,17 @@ const Signin: React.FC = () => {
                     </div>
                 </CardBody>
 
-                <CardFooter className='flex flex-col items-center justify-center'>
-                    <button className='text-center text-[#6153ff] hover:text-[#4838ff] mb-4'>
-                        Don't have an account? Sign up
-                    </button>
-                    <button
-                        className='bg-[#6153ff] hover:bg-[#4838ff] text-white shadow-sm hover:shadow-md py-2 rounded-sm w-full transition'
-                        onClick={handleSubmit}
+                <CardFooter className='flex flex-col items-center justify-center gap-4'>
+                    <Button
+                        className='text-[#6153ff] hover:text-[#4838ff]'
+                        textOnly
+                        onClick={() => console.log("doesn't have account")}
                     >
+                        Don't have an account? Sign up
+                    </Button>
+                    <Button className='w-full text-white bg-[#6153ff] hover:bg-[#4838ff] ' onClick={handleSubmit}>
                         Sign In
-                    </button>
+                    </Button>
                 </CardFooter>
             </Card>
         </Page>
