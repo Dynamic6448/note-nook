@@ -17,22 +17,21 @@ export const auth = getAuth(app);
 export const db = getDatabase(app);
 export default app;
 
-// create note method
+export const refNotes = (path?: string) => {
+    return ref(db, `users/${auth.currentUser?.uid}/notes${path ? `/${path}` : ''}`);
+};
+
 export const createNote = (title: string, note: string) => {
-    push(ref(db, `users/${auth.currentUser?.uid}/notes`), {
+    push(refNotes(), {
         title,
         note,
     });
 };
 
-export const readNotes = () => {
-    return ref(db, `users/${auth.currentUser?.uid}/notes`);
-};
-
 export const getNoteById: any = (id: string) => {
     let returnVal = null;
 
-    onValue(readNotes(), (snapshot) => {
+    onValue(refNotes(), (snapshot) => {
         const data = snapshot.val();
 
         if (!snapshot.exists()) return;
@@ -46,14 +45,14 @@ export const getNoteById: any = (id: string) => {
 };
 
 export const setNoteById = (id: string, title: string, note: string) => {
-    set(ref(db, `users/${auth.currentUser?.uid}/notes/${id}`), {
+    set(refNotes(id), {
         title,
         note,
     });
 };
 
 export const deleteNote = (id: string) => {
-    remove(ref(db, `users/${auth.currentUser?.uid}/notes/${id}`));
+    remove(refNotes(id));
 };
 
 let currentEditingNoteId: string = '';
