@@ -17,7 +17,7 @@ const Page: React.FC<PageProps> = ({ children, className }) => {
 
     return (
         <div className='p-16 w-full h-full'>
-            <img src='/logo_w_text_black.png' alt='logo' className='w-96' />
+            {/* <img src='/logo_w_text_black.png' alt='logo' className='w-96' /> */}
             <div className={className}>{children}</div>
         </div>
     );
