@@ -48,15 +48,11 @@ const Signin: React.FC = () => {
                 <CardHeader className='flex items-center justify-center p-2 text-2xl'>{hasAccount ? 'Welcome Back' : 'Get Started'}</CardHeader>
                 <CardBody>
                     <div className='mb-4'>
-                        <label className='block mb-2 font-medium' htmlFor='username'>
-                            Email
-                        </label>
+                        <label className='block mb-2 font-medium'>Email</label>
                         <input className='border p-2 w-full rounded-sm' type='email' placeholder='Enter your email' value={email} onChange={(event) => setEmail(event.target.value)} />
                     </div>
                     <div className='mb-4'>
-                        <label className='block mb-2 font-medium' htmlFor='password'>
-                            Password
-                        </label>
+                        <label className='block mb-2 font-medium'>Password</label>
                         <input
                             className='border p-2 w-full rounded-sm'
                             type='password'
