@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { onValue } from 'firebase/database';
-import { refNotes, deleteNote, getCurrentEditingNoteId, setCurrentEditingNoteId } from '../firebase';
-import { Card, CardBody, CardHeader } from '../components/Card';
+import { refNotes, deleteNote, setCurrentEditingNoteId, NoteType } from '../firebase';
+import { Card, CardBody, CardFooter, CardHeader } from '../components/Card';
 import Page from '.';
 import CreateNotePopup from '../components/CreateNotePopup';
 import EditNotePopup from '../components/EditNotePopup';
 import { Button } from '../components/Button';
 
 const Dashboard: React.FC = () => {
-    const [notes, setNotes] = useState([] as any);
+    const [notes, setNotes] = useState<NoteType[]>([]);
     const [showCreateNotePopup, setShowCreateNotePopup] = useState(false);
     const [showEditNotePopup, setShowEditNotePopup] = useState(false);
 
@@ -23,13 +23,15 @@ const Dashboard: React.FC = () => {
                 return;
             }
 
-            const noteArr: any = [];
+            const noteArr: NoteType[] = [];
 
             Object.entries(data).map((note: any) => {
                 noteArr.push({
                     id: note[0],
                     title: note[1].title,
                     note: note[1].note,
+                    dateCreated: note[1].dateCreated,
+                    dateUpdated: note[1].dateUpdated,
                 });
             });
 
@@ -81,7 +83,11 @@ const Dashboard: React.FC = () => {
                                 </Button>
                             </div>
                         </CardHeader>
-                        <CardBody className='h-[100px] overflow-y-scroll'>{note.note}</CardBody>
+                        <CardBody className='h-[80px] overflow-y-scroll'>{note.note}</CardBody>
+                        <CardFooter className='flex flex-row gap-4 h-[100px]'>
+                            <div className='text-xs'>{`Created: ${note.dateCreated}`}</div>
+                            {note.dateUpdated && <div className='text-xs'>{`Updated: ${note.dateUpdated}`}</div>}
+                        </CardFooter>
                     </Card>
                 ))}
             </div>

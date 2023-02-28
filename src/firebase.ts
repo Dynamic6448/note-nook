@@ -22,14 +22,20 @@ export const refNotes = (path?: string) => {
 };
 
 export const createNote = (title: string, note: string) => {
-    push(refNotes(), {
+    const dateCreated = new Date();
+    const dateCreatedString = `${dateCreated.getMonth()}/${dateCreated.getDate()}/${dateCreated.getFullYear()}`;
+
+    const pushed = push(refNotes(), {
         title,
         note,
+        dateCreated: dateCreatedString,
     });
+
+    console.log(pushed);
 };
 
-export const getNoteById: any = (id: string) => {
-    let returnVal = null;
+export const getNoteById = (id: string) => {
+    let foundNote: any = null;
 
     onValue(refNotes(), (snapshot) => {
         const data = snapshot.val();
@@ -37,17 +43,31 @@ export const getNoteById: any = (id: string) => {
         if (!snapshot.exists()) return;
 
         Object.entries(data).map((note: any) => {
-            if (note[0] === id) returnVal = note[1];
+            if (note[0] === id) {
+                foundNote = {
+                    id: note[0],
+                    title: note[1].title,
+                    note: note[1].note,
+                    dateCreated: note[1].dateCreated,
+                    dateUpdated: note[1].dateUpdated,
+                };
+            }
         });
     });
 
-    return returnVal;
+    return foundNote;
 };
 
 export const setNoteById = (id: string, title: string, note: string) => {
+    const dateCreated = getNoteById(id).dateCreated;
+    const dateUpdated = new Date();
+    const dateUpdatedString = `${dateUpdated.getMonth()}/${dateUpdated.getDate()}/${dateUpdated.getFullYear()}`;
+
     set(refNotes(id), {
         title,
         note,
+        dateCreated,
+        dateUpdated: dateUpdatedString,
     });
 };
 
@@ -61,6 +81,14 @@ export const setCurrentEditingNoteId = (id: string) => {
     currentEditingNoteId = id;
 };
 
-export const getCurrentEditingNoteId = () => {
-    return currentEditingNoteId;
+export const getCurrentEditingNote = () => {
+    return getNoteById(currentEditingNoteId);
 };
+
+export interface NoteType {
+    id: string;
+    title: string;
+    note: string;
+    dateCreated: Date;
+    dateUpdated: Date;
+}
