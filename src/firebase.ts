@@ -23,7 +23,7 @@ export const refNotes = (path?: string) => {
 
 export const createNote = (title: string, note: string) => {
     const dateCreated = new Date();
-    const dateCreatedString = `${dateCreated.getMonth()}/${dateCreated.getDate()}/${dateCreated.getFullYear()}`;
+    const dateCreatedString = `${dateCreated.getMonth() + 1}/${dateCreated.getDate()}/${dateCreated.getFullYear()}`;
 
     const pushed = push(refNotes(), {
         title,
@@ -61,7 +61,7 @@ export const getNoteById = (id: string) => {
 export const setNoteById = (id: string, title: string, note: string) => {
     const dateCreated = getNoteById(id).dateCreated;
     const dateUpdated = new Date();
-    const dateUpdatedString = `${dateUpdated.getMonth()}/${dateUpdated.getDate()}/${dateUpdated.getFullYear()}`;
+    const dateUpdatedString = `${dateUpdated.getMonth() + 1}/${dateUpdated.getDate()}/${dateUpdated.getFullYear()}`;
 
     set(refNotes(id), {
         title,
