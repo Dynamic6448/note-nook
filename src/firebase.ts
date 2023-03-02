@@ -89,6 +89,6 @@ export interface NoteType {
     id: string;
     title: string;
     note: string;
-    dateCreated: Date;
-    dateUpdated: Date;
+    dateCreated: string;
+    dateUpdated: string | undefined;
 }

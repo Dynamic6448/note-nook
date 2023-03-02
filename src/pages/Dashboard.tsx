@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { onValue } from 'firebase/database';
 import { refNotes, deleteNote, setCurrentEditingNoteId, NoteType } from '../firebase';
-import { Card, CardBody, CardFooter, CardHeader } from '../components/Card';
+import { Card } from '../components/Card';
 import Page from '.';
 import CreateNotePopup from '../components/CreateNotePopup';
 import EditNotePopup from '../components/EditNotePopup';
 import { Button } from '../components/Button';
+import { Note } from '../components/Note';
 
 const Dashboard: React.FC = () => {
     const [notes, setNotes] = useState<NoteType[]>([]);
@@ -55,40 +56,21 @@ const Dashboard: React.FC = () => {
 
     return (
         <Page>
-            <div className='flex flex-row flex-wrap p-4'>
+            <div className='flex flex-row flex-wrap'>
                 {notes.map((note, i) => (
-                    <Card key={note.id} className='mb-4 w-[400px] h-[300px]'>
-                        <CardHeader className='text-center flex flex-row justify-between items-center'>
-                            {note.title}
-
-                            <div className='flex flex-row gap-2'>
-                                {noteToDelete !== i && (
-                                    <Button className='bg-red-600 hover:bg-red-700' onClick={() => setNoteToDelete(i)}>
-                                        Delete
-                                    </Button>
-                                )}
-                                {noteToDelete === i && (
-                                    <div className='flex flex-row gap-1'>
-                                        <Button className='bg-red-600 hover:bg-red-700' onClick={() => setNoteToDelete(-1)}>
-                                            X
-                                        </Button>
-                                        <Button className='bg-green-600 hover:bg-green-700' onClick={() => handleDeleteNote(note.id)}>
-                                            ✓
-                                        </Button>
-                                    </div>
-                                )}
-
-                                <Button className='bg-orange-600 hover:bg-orange-700  ' onClick={() => handleShowEditModal(note.id)}>
-                                    Edit
-                                </Button>
-                            </div>
-                        </CardHeader>
-                        <CardBody className='h-[175px] overflow-y-scroll'>{note.note}</CardBody>
-                        <CardFooter className='flex flex-row justify-between'>
-                            <div className='text-xs'>{`Created: ${note.dateCreated}`}</div>
-                            {note.dateUpdated && <div className='text-xs'>{`Updated: ${note.dateUpdated}`}</div>}
-                        </CardFooter>
-                    </Card>
+                    <Note
+                        key={note.id}
+                        title={note.title}
+                        dateCreated={note.dateCreated}
+                        dateUpdated={note.dateUpdated}
+                        deleting={noteToDelete === i}
+                        onTryDelete={() => setNoteToDelete(i)}
+                        onDeleteCancel={() => setNoteToDelete(-1)}
+                        onDeleteConfirm={() => handleDeleteNote(note.id)}
+                        onEdit={() => handleShowEditModal(note.id)}
+                    >
+                        {note.note}
+                    </Note>
                 ))}
             </div>
 
