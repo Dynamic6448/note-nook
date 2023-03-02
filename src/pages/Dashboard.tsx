@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
         <Page>
             <div className='flex flex-row flex-wrap p-4'>
                 {notes.map((note, i) => (
-                    <Card key={note.id} className='mb-4 w-[400px] h-[200px]'>
+                    <Card key={note.id} className='mb-4 w-[400px] h-[300px]'>
                         <CardHeader className='text-center flex flex-row justify-between items-center'>
                             {note.title}
 
@@ -83,8 +83,8 @@ const Dashboard: React.FC = () => {
                                 </Button>
                             </div>
                         </CardHeader>
-                        <CardBody className='h-[80px] overflow-y-scroll'>{note.note}</CardBody>
-                        <CardFooter className='flex flex-row gap-4 h-[100px]'>
+                        <CardBody className='h-[175px] overflow-y-scroll'>{note.note}</CardBody>
+                        <CardFooter className='flex flex-row justify-between'>
                             <div className='text-xs'>{`Created: ${note.dateCreated}`}</div>
                             {note.dateUpdated && <div className='text-xs'>{`Updated: ${note.dateUpdated}`}</div>}
                         </CardFooter>
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
                 ))}
             </div>
 
-            <Button className='fixed right-6 bottom-6 bg-blue-500 hover:bg-blue-600 text-sm' onClick={handleShowCreateModal}>
+            <Button className='fixed right-6 bottom-6 bg-blue-500 hover:bg-blue-600 text-lg' onClick={handleShowCreateModal}>
                 Create Note
             </Button>
 

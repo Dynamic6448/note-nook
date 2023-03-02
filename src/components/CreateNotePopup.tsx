@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createNote } from '../firebase';
 import { Modal } from './Modal';
+import { Button } from './Button';
 
 interface CreateNotePopupProps {
     show: boolean;
@@ -31,12 +32,12 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
                 <textarea placeholder='Note' className='w-full p-2 border-2 border-gray-300 rounded-xl' onChange={handleNoteChange} />
             </div>
             <div className='flex flex-row w-full items-center justify-between'>
-                <button className='py-2 px-4 bg-slate-600 hover:bg-slate-700 transition text-white rounded-full' onClick={handleClose}>
+                <Button className='bg-slate-600 hover:bg-slate-700 text-[1rem]' onClick={handleClose}>
                     Cancel
-                </button>
-                <button className='py-2 px-4 bg-blue-600 hover:bg-blue-700 transition text-white rounded-full' onClick={handleSubmit}>
+                </Button>
+                <Button className='bg-blue-600 hover:bg-blue-700 text-[1rem]' onClick={handleSubmit}>
                     Create
-                </button>
+                </Button>
             </div>
         </Modal>
     );

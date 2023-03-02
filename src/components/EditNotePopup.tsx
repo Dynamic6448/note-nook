@@ -35,10 +35,10 @@ const EditNotePopup: React.FC<EditNotePopupProps> = ({ show, handleClose }) => {
                 <textarea className='w-full p-2 border-2 border-gray-300 rounded-xl' placeholder='Note' value={note} onChange={(event) => setNote(event.target.value)} />
             </div>
             <div className='flex flex-row w-full items-center justify-between'>
-                <Button className='bg-slate-600 hover:bg-slate-700' onClick={handleClose}>
+                <Button className='bg-slate-600 hover:bg-slate-700 text-[1rem]' onClick={handleClose}>
                     Cancel
                 </Button>
-                <Button className='bg-blue-600 hover:bg-blue-700' onClick={handleSubmit}>
+                <Button className='bg-blue-600 hover:bg-blue-700 text-[1rem]' onClick={handleSubmit}>
                     Save
                 </Button>
             </div>
