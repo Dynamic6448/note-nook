@@ -48,12 +48,12 @@ const Signin: React.FC = () => {
                 <Card.Body>
                     <div className='mb-4'>
                         <label className='block mb-2 font-medium'>Email</label>
-                        <input className='border p-2 w-full rounded-sm' type='email' placeholder='Enter your email' value={email} onChange={(event) => setEmail(event.target.value)} />
+                        <input className='border p-2 w-full rounded-lg' type='email' placeholder='Enter your email' value={email} onChange={(event) => setEmail(event.target.value)} />
                     </div>
                     <div className='mb-4'>
                         <label className='block mb-2 font-medium'>Password</label>
                         <input
-                            className='border p-2 w-full rounded-sm'
+                            className='border p-2 w-full rounded-lg'
                             type='password'
                             placeholder='Enter your password'
                             value={password}
@@ -68,7 +68,7 @@ const Signin: React.FC = () => {
                             <Button className='text-[#6153ff] hover:text-[#4838ff]' textOnly onClick={() => setHasAccount(false)}>
                                 Don't have an account? Sign up
                             </Button>
-                            <Button className='w-full text-white bg-[#6153ff] hover:bg-[#4838ff] ' onClick={handleSignin}>
+                            <Button className='w-full text-whitet text-[1rem] bg-[#6153ff] hover:bg-[#4838ff] ' onClick={handleSignin}>
                                 Sign In
                             </Button>
                         </>

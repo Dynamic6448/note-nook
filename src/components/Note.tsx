@@ -51,7 +51,7 @@ export const Note: React.FC<NoteProps> = ({ key, title, dateCreated, dateUpdated
                     </Button>
                 </div>
             </Card.Header>
-            <Card.Body className='h-[175px] overflow-y-scroll'>{note}</Card.Body>
+            <Card.Body className='pr-4 h-[175px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>{note}</Card.Body>
 
             <Card.Footer className='flex flex-col text-xs gap-1'>
                 <div className='flex flex-row gap-4'>
