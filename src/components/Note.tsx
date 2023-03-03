@@ -60,7 +60,7 @@ export const Note: React.FC<NoteProps> = ({ key, title, dateCreated, dateUpdated
                 </div>
                 <div className='flex flex-row gap-4'>
                     <div>{`Words: ${note.split(' ').length}`}</div>
-                    {dateUpdated && <div>{`Characters: ${note.length}`}</div>}
+                    <div>{`Characters: ${note.length}`}</div>
                 </div>
             </Card.Footer>
         </Card>

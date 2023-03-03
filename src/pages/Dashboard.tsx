@@ -56,7 +56,7 @@ const Dashboard: React.FC = () => {
 
     return (
         <Page>
-            <div className='flex flex-row flex-wrap'>
+            <div className='flex flex-row justify-between flex-wrap'>
                 {notes.map((note, i) => (
                     <Note
                         key={note.id}
