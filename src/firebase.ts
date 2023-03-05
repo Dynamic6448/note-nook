@@ -17,21 +17,23 @@ export const auth = getAuth(app);
 export const db = getDatabase(app);
 export default app;
 
+const getDateString = (date: Date) => {
+    const hour = date.getHours() > 12 ? date.getHours() - 12 : date.getHours() === 0 ? 12 : date.getHours();
+    const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+    const ampm = date.getHours() >= 12 ? 'pm' : 'am';
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} at ${hour}:${minute}${ampm}`;
+};
+
 export const refNotes = (path?: string) => {
     return ref(db, `users/${auth.currentUser?.uid}/notes${path ? `/${path}` : ''}`);
 };
 
 export const createNote = (title: string, note: string) => {
-    const dateCreated = new Date();
-    const dateCreatedString = `${dateCreated.getMonth() + 1}/${dateCreated.getDate()}/${dateCreated.getFullYear()}`;
-
-    const pushed = push(refNotes(), {
+    push(refNotes(), {
         title,
         note,
-        dateCreated: dateCreatedString,
+        dateCreated: getDateString(new Date()),
     });
-
-    console.log(pushed);
 };
 
 export const getNoteById = (id: string) => {
@@ -60,14 +62,12 @@ export const getNoteById = (id: string) => {
 
 export const setNoteById = (id: string, title: string, note: string) => {
     const dateCreated = getNoteById(id).dateCreated;
-    const dateUpdated = new Date();
-    const dateUpdatedString = `${dateUpdated.getMonth() + 1}/${dateUpdated.getDate()}/${dateUpdated.getFullYear()}`;
 
     set(refNotes(id), {
         title,
         note,
         dateCreated,
-        dateUpdated: dateUpdatedString,
+        dateUpdated: getDateString(new Date()),
     });
 };
 

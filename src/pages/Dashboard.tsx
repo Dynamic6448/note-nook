@@ -1,9 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Calendar from './Dashboard Sections/Calendar';
 import Notes from './Dashboard Sections/Notes';
 
 const Dashboard: React.FC = () => {
+    const navigate = useNavigate();
     const { currentUser } = useAuth();
     const [selectedSection, setSelectedSection] = useState(0);
 
@@ -23,7 +25,7 @@ const Dashboard: React.FC = () => {
             <div className='w-64 h-full bg-white shadow-xl'>
                 <div className='p-4'>
                     <p className='text-xl font-semibold'>Dashboard</p>
-                    <p className='text-md'>{currentUser.email}</p>
+                    <p className='text-md'>{currentUser ? currentUser.email : ''}</p>
                 </div>
                 <SidebarButton active={selectedSection === 0} onClick={() => setSelectedSection(0)}>
                     Notes

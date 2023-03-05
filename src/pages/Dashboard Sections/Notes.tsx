@@ -8,7 +8,7 @@ import EditNotePopup from '../../components/EditNotePopup';
 import Page from '..';
 
 const Notes: React.FC = () => {
-    const [notes, setNotes] = useState<NoteType[]>([]);
+    const [notes, setNotes] = useState<NoteType[]>();
     const [showCreateNotePopup, setShowCreateNotePopup] = useState(false);
     const [showEditNotePopup, setShowEditNotePopup] = useState(false);
 
@@ -55,21 +55,23 @@ const Notes: React.FC = () => {
     return (
         <Page>
             <div className='flex flex-row gap-16 flex-wrap'>
-                {notes.map((note, i) => (
-                    <Note
-                        key={note.id}
-                        title={note.title}
-                        dateCreated={note.dateCreated}
-                        dateUpdated={note.dateUpdated}
-                        deleting={noteToDelete === i}
-                        onTryDelete={() => setNoteToDelete(i)}
-                        onDeleteCancel={() => setNoteToDelete(-1)}
-                        onDeleteConfirm={() => handleDeleteNote(note.id)}
-                        onEdit={() => handleShowEditModal(note.id)}
-                    >
-                        {note.note}
-                    </Note>
-                ))}
+                {!notes && <div className='text-4xl font-bold text-gray-100'>Loading...</div>}
+                {notes &&
+                    notes.map((note, i) => (
+                        <Note
+                            key={note.id}
+                            title={note.title}
+                            dateCreated={note.dateCreated}
+                            dateUpdated={note.dateUpdated}
+                            deleting={noteToDelete === i}
+                            onTryDelete={() => setNoteToDelete(i)}
+                            onDeleteCancel={() => setNoteToDelete(-1)}
+                            onDeleteConfirm={() => handleDeleteNote(note.id)}
+                            onEdit={() => handleShowEditModal(note.id)}
+                        >
+                            {note.note}
+                        </Note>
+                    ))}
             </div>
 
             <Button className='fixed right-6 bottom-6 bg-blue-500 hover:bg-blue-600 text-lg' onClick={handleShowCreateModal}>

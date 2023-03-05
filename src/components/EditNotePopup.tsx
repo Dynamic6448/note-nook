@@ -31,8 +31,8 @@ const EditNotePopup: React.FC<EditNotePopupProps> = ({ show, handleClose }) => {
     return (
         <Modal title='Edit Note' show={show}>
             <div className='mb-6'>
-                <input className='w-full p-2 border-2 border-gray-300 rounded-xl mb-4' type='text' placeholder='Title' value={title} onChange={(event) => setTitle(event.target.value)} />
-                <textarea className='w-full p-2 border-2 border-gray-300 rounded-xl' placeholder='Note' value={note} onChange={(event) => setNote(event.target.value)} />
+                <input className='w-full p-2 border-2 border-gray-300 rounded-xl mb-4' type='text' placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+                <textarea className='w-full p-2 border-2 border-gray-300 rounded-xl' placeholder='Note' value={note} onChange={(e) => setNote(e.target.value)} />
             </div>
             <div className='flex flex-row w-full items-center justify-between'>
                 <Button className='bg-slate-600 hover:bg-slate-700 text-[1rem]' onClick={handleClose}>

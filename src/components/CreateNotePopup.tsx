@@ -16,7 +16,9 @@ const CreateNotePopup: React.FC<CreateNotePopupProps> = ({ show, handleClose }) 
     };
 
     const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setNote(e.target.value);
+        // TODO: convert linebreaks in textarea to new lines
+        const text = e.target.value;
+        setNote(text);
     };
 
     const handleSubmit = () => {
