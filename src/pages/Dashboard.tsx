@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className='w-full h-full flex flex-row'>
-            <div className='w-64 h-full bg-white shadow-xl'>
+            <div className='fixed w-64 h-screen bg-white shadow-xl'>
                 <div className='p-4'>
                     <p className='text-xl font-semibold'>Dashboard</p>
                     <p className='text-md'>{currentUser ? currentUser.email : ''}</p>
@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
                     Calendar
                 </SidebarButton>
             </div>
-            {getSection()}
+            <div className='pl-64 w-full'>{getSection()}</div>
         </div>
     );
 };

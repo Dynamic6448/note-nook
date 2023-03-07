@@ -55,7 +55,7 @@ const Notes: React.FC = () => {
     return (
         <Page>
             <div className='flex flex-row gap-16 flex-wrap'>
-                {!notes && <div className='text-4xl font-bold text-gray-100'>Loading...</div>}
+                {!notes && <div className='text-4xl font-bold text-gray-300'>Loading...</div>}
                 {notes &&
                     notes.map((note, i) => (
                         <Note
