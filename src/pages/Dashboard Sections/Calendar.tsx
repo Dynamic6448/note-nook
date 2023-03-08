@@ -60,44 +60,28 @@ const Calendar: React.FC = () => {
 
     return (
         <Page className='w-full'>
-            {/* <p className='text-6xl font-bold'>{getMonthById(today.getMonth())}</p> */}
-            <div className='w-full flex flex-row justify-between'>
-                <div>Sunday</div>
-                <div>Monday</div>
-                <div>Tuesday</div>
-                <div>Wednesday</div>
-                <div>Thursday</div>
-                <div>Friday</div>
-                <div>Saturday</div>
+            <p className='text-4xl font-bold pb-4'>{getMonthById(today.getMonth())}</p>
+            <div className='flex flex-row text-xl font-bold'>
+                {Array.from({ length: 7 }).map((_, i) => (
+                    <div className='w-1/6 flex flex-col'>
+                        {getDayById(i)}
+                        <CalendarDay date={1} />
+                        <CalendarDay date={2} />
+                        <CalendarDay date={3} />
+                        <CalendarDay date={4} />
+                        <CalendarDay date={5} />
+                    </div>
+                ))}
             </div>
-            <table className='w-full'>
-                <thead className='w-full'>
-                    <tr className='w-full flex flex-row justify-between'></tr>
-                </thead>
-                <tbody>
-                    {/* {Array.from({ length: 6 }, (_, i) => (
-                        <tr key={i}>
-                            {Array.from({ length: 7 }, (_, j) => (
-                                <td key={j}>
-                                    {i === 0 && j < today.getDay() ? (
-                                        <div className='text-gray-400'>{getDaysInMonth(today.getMonth(), today.getFullYear()) - (today.getDay() - j) + 1}</div>
-                                    ) : (
-                                        <div>
-                                            {i === 0 && j === today.getDay() ? (
-                                                <div className='text-blue-400'>{today.getDate()}</div>
-                                            ) : (
-                                                <div>{i === 0 ? getDaysInMonth(today.getMonth(), today.getFullYear()) - (today.getDay() - j) + 1 : i * 7 + j - today.getDay() + 1}</div>
-                                            )}
-                                        </div>
-                                    )}
-                                </td>
-                            ))}
-                        </tr>
-                    ))} */}
-                </tbody>
-            </table>
         </Page>
     );
 };
-
+const CalendarDay: React.FC<{ date: number; empty?: boolean }> = ({ date, empty }) => {
+    return (
+        <div className={`w-full h-[150px] border-solid border-2 ${empty ? 'border-transparent' : 'border-gray-200'}`}>
+            {!empty && <p className='text-xl font-bold'>{date}</p>}
+            <div></div>
+        </div>
+    );
+};
 export default Calendar;
