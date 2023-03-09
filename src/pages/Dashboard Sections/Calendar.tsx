@@ -12,14 +12,17 @@ const getDaysInWeek = (date: Date) => {
     const datesOfWeek: Date[] = [];
     for (let i = dayOfWeek; i >= 0; i--) {
         const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i);
-        if (date.getMonth() + 1 === newDate.getMonth()) datesOfWeek.push(newDate);
+        if (date.getMonth() === newDate.getMonth()) datesOfWeek.push(newDate);
     }
     for (let i = 1; i < 7 - dayOfWeek; i++) {
         const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + i);
-        if (date.getMonth() + 1 === newDate.getMonth()) datesOfWeek.push(newDate);
+        if (date.getMonth() === newDate.getMonth()) datesOfWeek.push(newDate);
     }
 
-    return datesOfWeek;
+    return datesOfWeek.length;
+};
+const isDayInMonth = (year: number, month: number, day: number) => {
+    return new Date(year, month, day).getMonth() === month;
 };
 const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -77,7 +80,6 @@ const getDayById = (id: number) => {
 
 const Calendar: React.FC = () => {
     const [today] = useState(new Date());
-    console.log(getDaysInWeek(today));
 
     return (
         <Page className='w-full'>
@@ -86,20 +88,20 @@ const Calendar: React.FC = () => {
                 <thead>
                     <tr>
                         {Array.from({ length: 7 }).map((_, i) => (
-                            <th className='text-center'>{getDayById(i)}</th>
+                            <th className='text-start'>{getDayById(i)}</th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
                     {Array.from({ length: getWeeksInMonth(today) }).map((_, i) => {
-                        console.log('outer');
                         return (
                             <tr>
-                                {Array.from({ length: 7 }).map((_, j) => {
-                                    console.log('inner');
+                                {Array.from({ length: getDaysInWeek(new Date(today.getFullYear(), today.getMonth(), 1 + 7 * i)) }).map((_, j) => {
+                                    const date = i * 7 + j + 1;
+
                                     return (
-                                        <td className='w-[219px]'>
-                                            <CalendarDay date={i * 7 + j + 1} />
+                                        <td className='min-w-[219px]'>
+                                            <CalendarDay date={date} empty={!isDayInMonth(today.getFullYear(), today.getMonth(), date)} />
                                         </td>
                                     );
                                 })}
