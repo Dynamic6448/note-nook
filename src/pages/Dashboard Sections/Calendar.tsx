@@ -1,11 +1,31 @@
 import React, { useState } from 'react';
 import Page from '..';
 
-const getDaysInMonth = (month: number, year: number) => {
-    return new Date(year, month, 0).getDate();
+const getWeeksInMonth = (date: Date) => {
+    const firstDay = new Date(date.setDate(1)).getDay();
+    const totalDays = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    return Math.ceil((firstDay + totalDays) / 7);
 };
-const getMonthById = (id: number) => {
-    switch (id) {
+const getDaysInWeek = (date: Date) => {
+    const dayOfWeek = date.getDay();
+
+    const datesOfWeek: Date[] = [];
+    for (let i = dayOfWeek; i >= 0; i--) {
+        const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i);
+        if (date.getMonth() + 1 === newDate.getMonth()) datesOfWeek.push(newDate);
+    }
+    for (let i = 1; i < 7 - dayOfWeek; i++) {
+        const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + i);
+        if (date.getMonth() + 1 === newDate.getMonth()) datesOfWeek.push(newDate);
+    }
+
+    return datesOfWeek;
+};
+const getDaysInMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+};
+const getMonth = (date: Date) => {
+    switch (date.getMonth()) {
         case 0:
             return 'January';
         case 1:
@@ -57,22 +77,37 @@ const getDayById = (id: number) => {
 
 const Calendar: React.FC = () => {
     const [today] = useState(new Date());
+    console.log(getDaysInWeek(today));
 
     return (
         <Page className='w-full'>
-            <p className='text-4xl font-bold pb-4'>{getMonthById(today.getMonth())}</p>
-            <div className='flex flex-row text-xl font-bold'>
-                {Array.from({ length: 7 }).map((_, i) => (
-                    <div className='w-1/6 flex flex-col'>
-                        {getDayById(i)}
-                        <CalendarDay date={1} />
-                        <CalendarDay date={2} />
-                        <CalendarDay date={3} />
-                        <CalendarDay date={4} />
-                        <CalendarDay date={5} />
-                    </div>
-                ))}
-            </div>
+            <p className='text-4xl font-bold pb-4'>{getMonth(today)}</p>
+            <table className='text-xl'>
+                <thead>
+                    <tr>
+                        {Array.from({ length: 7 }).map((_, i) => (
+                            <th className='text-center'>{getDayById(i)}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {Array.from({ length: getWeeksInMonth(today) }).map((_, i) => {
+                        console.log('outer');
+                        return (
+                            <tr>
+                                {Array.from({ length: 7 }).map((_, j) => {
+                                    console.log('inner');
+                                    return (
+                                        <td className='w-[219px]'>
+                                            <CalendarDay date={i * 7 + j + 1} />
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </Page>
     );
 };
