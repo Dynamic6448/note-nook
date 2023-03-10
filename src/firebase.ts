@@ -107,7 +107,7 @@ export const getCalendarEventById: (id: string) => CalendarEventType = (id: stri
                 foundEvent = {
                     id: event[0],
                     title: event[1].title,
-                    date: event[1].date,
+                    date: new Date(event[1].date),
                 };
             }
         });
