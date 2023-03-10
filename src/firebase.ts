@@ -37,7 +37,9 @@ export const createNote = (title: string, note: string) => {
         dateCreated: getDateString(new Date()),
     });
 };
-export const getNoteById: (id: string) => NoteType | null = (id: string) => {
+export const getNoteById: (id: string) => NoteType = (id: string) => {
+    let foundNote: any = null;
+
     onValue(refNotes(), (snapshot) => {
         const data = snapshot.val();
 
@@ -45,7 +47,7 @@ export const getNoteById: (id: string) => NoteType | null = (id: string) => {
 
         Object.entries(data).forEach((note: any) => {
             if (note[0] === id) {
-                return {
+                foundNote = {
                     id: note[0],
                     title: note[1].title,
                     note: note[1].note,
@@ -56,13 +58,10 @@ export const getNoteById: (id: string) => NoteType | null = (id: string) => {
         });
     });
 
-    return null;
+    return foundNote;
 };
 export const setNoteById = (id: string, title: string, note: string) => {
-    const foundNote = getNoteById(id);
-    if (!foundNote) return;
-
-    const dateCreated = foundNote.dateCreated;
+    const dateCreated = getNoteById(id).dateCreated;
 
     set(refNotes(id), {
         title,
@@ -95,7 +94,9 @@ export const createCalendarEvent = (title: string, date: string) => {
         date,
     });
 };
-export const getCalendarEventById: (id: string) => CalendarEventType | null = (id: string) => {
+export const getCalendarEventById: (id: string) => CalendarEventType = (id: string) => {
+    let foundEvent: any = null;
+
     onValue(refCalendarEvents(), (snapshot) => {
         const data = snapshot.val();
 
@@ -103,7 +104,7 @@ export const getCalendarEventById: (id: string) => CalendarEventType | null = (i
 
         Object.entries(data).forEach((event: any) => {
             if (event[0] === id) {
-                return {
+                foundEvent = {
                     id: event[0],
                     title: event[1].title,
                     date: event[1].date,
@@ -112,7 +113,7 @@ export const getCalendarEventById: (id: string) => CalendarEventType | null = (i
         });
     });
 
-    return null;
+    return foundEvent;
 };
 export const setCalendarEventById = (id: string, title: string, date: string) => {
     set(refCalendarEvents(id), {
