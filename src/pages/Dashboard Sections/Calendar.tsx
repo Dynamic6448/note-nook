@@ -94,14 +94,21 @@ const Calendar: React.FC = () => {
                 </thead>
                 <tbody>
                     {Array.from({ length: getWeeksInMonth(today) }).map((_, i) => {
+                        const daysInWeek = getDaysInWeek(new Date(today.getFullYear(), today.getMonth(), 1 + 7 * i));
+                        let empties = 0;
                         return (
                             <tr>
-                                {Array.from({ length: getDaysInWeek(new Date(today.getFullYear(), today.getMonth(), 1 + 7 * i)) }).map((_, j) => {
+                                {Array.from({ length: 7 }).map((_, j) => {
                                     const date = i * 7 + j + 1;
+
+                                    if (date > getDaysInMonth(today)) return null;
+
+                                    const empty = i === 0 && !(j >= 7 - daysInWeek);
+                                    if (empty) empties++;
 
                                     return (
                                         <td className='min-w-[219px]'>
-                                            <CalendarDay date={date} empty={!isDayInMonth(today.getFullYear(), today.getMonth(), date)} />
+                                            <CalendarDay date={date - empties} empty={empty} />
                                         </td>
                                     );
                                 })}
