@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Page from '..';
+import { Button } from '../../components/Button';
 
 const getWeeksInMonth = (date: Date) => {
     const firstDay = new Date(date.setDate(1)).getDay();
@@ -77,11 +78,23 @@ const getDayById = (id: number) => {
 };
 
 const Calendar: React.FC = () => {
-    const [today] = useState(new Date());
+    const today = new Date();
+    const [selectedMonth, setSelectedMonth] = useState(today);
 
     return (
         <Page className='w-full'>
-            <p className='text-4xl font-bold pb-4'>{getMonth(today)}</p>
+            <div className='pb-2'>
+                <p className='text-4xl font-bold pb-2'>{`${getMonth(selectedMonth)} ${selectedMonth.getFullYear()}`}</p>
+                <div className='w-full flex flex-row gap-4'>
+                    <Button className='bg-blue-600 hover:bg-blue-700 text-lg' onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1, 1))}>
+                        Prev
+                    </Button>
+                    <Button className='bg-blue-600 hover:bg-blue-700 text-lg' onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 1))}>
+                        Next
+                    </Button>
+                </div>
+            </div>
+
             <table className='text-xl'>
                 <thead>
                     <tr>
@@ -91,14 +104,14 @@ const Calendar: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.from({ length: getWeeksInMonth(today) }).map((_, i) => {
-                        const daysInWeek = getDaysInWeek(new Date(today.getFullYear(), today.getMonth(), 1 + 7 * i));
+                    {Array.from({ length: getWeeksInMonth(selectedMonth) }).map((_, i) => {
+                        const daysInWeek = getDaysInWeek(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1 + 7 * i));
                         return (
                             <tr>
                                 {daysInWeek.map((day, j) => {
                                     return (
                                         <td className='min-w-[219px]'>
-                                            <CalendarDay date={day.getDate()} subtle={!isDateInMonth(day, today.getMonth())} />
+                                            <CalendarDay date={day} subtle={!isDateInMonth(day, selectedMonth.getMonth())} />
                                         </td>
                                     );
                                 })}
@@ -110,10 +123,21 @@ const Calendar: React.FC = () => {
         </Page>
     );
 };
-const CalendarDay: React.FC<{ date: number; subtle?: boolean }> = ({ date, subtle }) => {
+const CalendarDay: React.FC<{ date: Date; subtle?: boolean }> = ({ date, subtle }) => {
+    const [isToday, setIsToday] = useState(false);
+
+    useEffect(() => {
+        const today = new Date();
+        setIsToday(date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear());
+    }, [date]);
+
     return (
-        <div className={`w-full h-[150px] border-solid border-2 ${subtle ? 'border-gray-100 text-gray-400' : 'border-gray-300'}`}>
-            <p className='pl-1 text-xl font-bold'>{date}</p>
+        <div
+            className={`w-full h-[140px] border-solid border-2 ${
+                subtle ? `${isToday ? 'border-blue-100' : 'border-gray-100'} text-gray-400` : `${isToday ? 'border-blue-300' : 'border-gray-300'}`
+            }`}
+        >
+            <p className='pl-1 text-xl font-bold'>{date.getDate()}</p>
         </div>
     );
 };
