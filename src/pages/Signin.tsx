@@ -65,19 +65,19 @@ const Signin: React.FC = () => {
                 <Card.Footer className='flex flex-col items-center justify-center gap-4'>
                     {hasAccount ? (
                         <>
-                            <Button className='text-[#6153ff] hover:text-[#4838ff]' textOnly onClick={() => setHasAccount(false)}>
+                            <Button className='text-violet-700 hover:text-violet-800' textOnly onClick={() => setHasAccount(false)}>
                                 Don't have an account? Sign up
                             </Button>
-                            <Button className='w-full text-whitet text-[1rem] bg-[#6153ff] hover:bg-[#4838ff] ' onClick={handleSignin}>
+                            <Button className='w-full text-whitet text-[1rem] bg-violet-700 hover:bg-violet-800 ' onClick={handleSignin}>
                                 Sign In
                             </Button>
                         </>
                     ) : (
                         <>
-                            <Button className='text-[#6153ff] hover:text-[#4838ff]' textOnly onClick={() => setHasAccount(true)}>
+                            <Button className='text-violet-700 hover:text-violet-800' textOnly onClick={() => setHasAccount(true)}>
                                 Already have an account? Sign in
                             </Button>
-                            <Button className='w-full text-white bg-[#6153ff] hover:bg-[#4838ff] ' onClick={handleSignup}>
+                            <Button className='w-full text-white bg-violet-700 hover:bg-violet-800 ' onClick={handleSignup}>
                                 Sign Up
                             </Button>
                         </>

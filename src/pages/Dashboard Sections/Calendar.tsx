@@ -86,10 +86,16 @@ const Calendar: React.FC = () => {
             <div className='pb-2'>
                 <p className='text-4xl font-bold pb-2'>{`${getMonth(selectedMonth)} ${selectedMonth.getFullYear()}`}</p>
                 <div className='w-full flex flex-row gap-4'>
-                    <Button className='bg-blue-600 hover:bg-blue-700 text-lg' onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1, 1))}>
+                    <Button
+                        className='bg-violet-600 hover:bg-violet-700 text-[1rem] px-2'
+                        onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1, 1))}
+                    >
                         Prev
                     </Button>
-                    <Button className='bg-blue-600 hover:bg-blue-700 text-lg' onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 1))}>
+                    <Button
+                        className='bg-violet-600 hover:bg-violet-700 text-[1rem] px-2'
+                        onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 1))}
+                    >
                         Next
                     </Button>
                 </div>
@@ -133,11 +139,24 @@ const CalendarDay: React.FC<{ date: Date; subtle?: boolean }> = ({ date, subtle 
 
     return (
         <div
-            className={`w-full h-[140px] border-solid border-2 ${
-                subtle ? `${isToday ? 'border-blue-200 bg-blue-50' : 'border-gray-100'} text-gray-400` : `${isToday ? 'border-blue-400 bg-blue-100' : 'border-gray-300'}`
+            className={`w-full h-[140px] border-solid border-2 rounded-md ${
+                subtle ? `${isToday ? 'border-violet-200 bg-violet-50' : 'border-gray-100'} text-gray-400` : `${isToday ? 'border-violet-400 bg-violet-100' : 'border-gray-300'}`
             }`}
         >
-            <p className='pl-1 text-xl font-bold'>{date.getDate()}</p>
+            <div className='flex flex-row justify-between px-1 py-1'>
+                <p className='text-xl font-bold'>{date.getDate()}</p>
+                <div className=''>
+                    <Button className={`${subtle ? 'bg-blue-100 hover:bg-blue-200' : 'bg-blue-300 hover:bg-blue-400'} text-lg px-2 py-0`} onClick={() => {}}>
+                        +
+                    </Button>
+                </div>
+            </div>
+            <div className='flex flex-col gap-1 text-sm px-1'>
+                <div className={`flex justify-between ${subtle ? 'border-blue-200' : 'border-blue-400'} border-2 rounded-md px-1`}>
+                    <p>Example Event</p>
+                    <p>12:00am</p>
+                </div>
+            </div>
         </div>
     );
 };

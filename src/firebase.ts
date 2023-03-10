@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
 
+//#region Firebase Config
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -16,6 +17,7 @@ const app = initializeApp({
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 export default app;
+//#endregion
 
 const getDateString = (date: Date) => {
     const hour = date.getHours() > 12 ? date.getHours() - 12 : date.getHours() === 0 ? 12 : date.getHours();
@@ -24,10 +26,10 @@ const getDateString = (date: Date) => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} at ${hour}:${minute}${ampm}`;
 };
 
+// #region Notes
 export const refNotes = (path?: string) => {
     return ref(db, `users/${auth.currentUser?.uid}/notes${path ? `/${path}` : ''}`);
 };
-
 export const createNote = (title: string, note: string) => {
     push(refNotes(), {
         title,
@@ -35,18 +37,15 @@ export const createNote = (title: string, note: string) => {
         dateCreated: getDateString(new Date()),
     });
 };
-
-export const getNoteById = (id: string) => {
-    let foundNote: any = null;
-
+export const getNoteById: (id: string) => NoteType | null = (id: string) => {
     onValue(refNotes(), (snapshot) => {
         const data = snapshot.val();
 
         if (!snapshot.exists()) return;
 
-        Object.entries(data).map((note: any) => {
+        Object.entries(data).forEach((note: any) => {
             if (note[0] === id) {
-                foundNote = {
+                return {
                     id: note[0],
                     title: note[1].title,
                     note: note[1].note,
@@ -57,11 +56,13 @@ export const getNoteById = (id: string) => {
         });
     });
 
-    return foundNote;
+    return null;
 };
-
 export const setNoteById = (id: string, title: string, note: string) => {
-    const dateCreated = getNoteById(id).dateCreated;
+    const foundNote = getNoteById(id);
+    if (!foundNote) return;
+
+    const dateCreated = foundNote.dateCreated;
 
     set(refNotes(id), {
         title,
@@ -70,21 +71,70 @@ export const setNoteById = (id: string, title: string, note: string) => {
         dateUpdated: getDateString(new Date()),
     });
 };
-
 export const deleteNote = (id: string) => {
     remove(refNotes(id));
 };
 
 let currentEditingNoteId: string = '';
-
 export const setCurrentEditingNoteId = (id: string) => {
     currentEditingNoteId = id;
 };
+export const getCurrentEditingNote: () => NoteType = () => {
+    const note = getNoteById(currentEditingNoteId);
+    return note || ({} as NoteType);
+};
+// #endregion
 
-export const getCurrentEditingNote = () => {
-    return getNoteById(currentEditingNoteId);
+//#region Calendar
+export const refCalendarEvents = (path?: string) => {
+    return ref(db, `users/${auth.currentUser?.uid}/calendar${path ? `/${path}` : ''}`);
+};
+export const createCalendarEvent = (title: string, date: string) => {
+    push(refCalendarEvents(), {
+        title,
+        date,
+    });
+};
+export const getCalendarEventById: (id: string) => CalendarEventType | null = (id: string) => {
+    onValue(refCalendarEvents(), (snapshot) => {
+        const data = snapshot.val();
+
+        if (!snapshot.exists()) return;
+
+        Object.entries(data).forEach((event: any) => {
+            if (event[0] === id) {
+                return {
+                    id: event[0],
+                    title: event[1].title,
+                    date: event[1].date,
+                };
+            }
+        });
+    });
+
+    return null;
+};
+export const setCalendarEventById = (id: string, title: string, date: string) => {
+    set(refCalendarEvents(id), {
+        title,
+        date,
+    });
+};
+export const deleteCalendarEvent = (id: string) => {
+    remove(refCalendarEvents(id));
 };
 
+let currentEditingCalendarEventId: string = '';
+export const setCurrentEditingCalendarEventId = (id: string) => {
+    currentEditingCalendarEventId = id;
+};
+export const getCurrentEditingCalendarEvent: () => CalendarEventType = () => {
+    const event = getCalendarEventById(currentEditingCalendarEventId);
+    return event || ({} as CalendarEventType);
+};
+//#endregion
+
+//#region Type Interfaces
 export interface NoteType {
     id: string;
     title: string;
@@ -92,3 +142,9 @@ export interface NoteType {
     dateCreated: string;
     dateUpdated: string | undefined;
 }
+export interface CalendarEventType {
+    id: string;
+    title: string;
+    date: string;
+}
+//#endregion

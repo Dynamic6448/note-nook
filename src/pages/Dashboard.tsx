@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
     }, [selectedSection]);
 
     return (
-        <div className='w-full h-full flex flex-row'>
+        <div className='w-full h-full flex'>
             <div className='fixed w-64 h-screen bg-white shadow-xl'>
                 <div className='p-4'>
                     <p className='text-xl font-semibold'>Dashboard</p>
