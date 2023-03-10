@@ -11,18 +11,16 @@ const getDaysInWeek = (date: Date) => {
 
     const datesOfWeek: Date[] = [];
     for (let i = dayOfWeek; i >= 0; i--) {
-        const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i);
-        if (date.getMonth() === newDate.getMonth()) datesOfWeek.push(newDate);
+        datesOfWeek.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - i));
     }
     for (let i = 1; i < 7 - dayOfWeek; i++) {
-        const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + i);
-        if (date.getMonth() === newDate.getMonth()) datesOfWeek.push(newDate);
+        datesOfWeek.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + i));
     }
 
-    return datesOfWeek.length;
+    return datesOfWeek;
 };
-const isDayInMonth = (year: number, month: number, day: number) => {
-    return new Date(year, month, day).getMonth() === month;
+const isDateInMonth = (date: Date, month: number) => {
+    return date.getMonth() === month;
 };
 const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -95,20 +93,12 @@ const Calendar: React.FC = () => {
                 <tbody>
                     {Array.from({ length: getWeeksInMonth(today) }).map((_, i) => {
                         const daysInWeek = getDaysInWeek(new Date(today.getFullYear(), today.getMonth(), 1 + 7 * i));
-                        let empties = 0;
                         return (
                             <tr>
-                                {Array.from({ length: 7 }).map((_, j) => {
-                                    const date = i * 7 + j + 1;
-
-                                    if (date > getDaysInMonth(today)) return null;
-
-                                    const empty = i === 0 && !(j >= 7 - daysInWeek);
-                                    if (empty) empties++;
-
+                                {daysInWeek.map((day, j) => {
                                     return (
                                         <td className='min-w-[219px]'>
-                                            <CalendarDay date={date - empties} empty={empty} />
+                                            <CalendarDay date={day.getDate()} subtle={!isDateInMonth(day, today.getMonth())} />
                                         </td>
                                     );
                                 })}
@@ -120,11 +110,10 @@ const Calendar: React.FC = () => {
         </Page>
     );
 };
-const CalendarDay: React.FC<{ date: number; empty?: boolean }> = ({ date, empty }) => {
+const CalendarDay: React.FC<{ date: number; subtle?: boolean }> = ({ date, subtle }) => {
     return (
-        <div className={`w-full h-[150px] border-solid border-2 ${empty ? 'border-transparent' : 'border-gray-200'}`}>
-            {!empty && <p className='text-xl font-bold'>{date}</p>}
-            <div></div>
+        <div className={`w-full h-[150px] border-solid border-2 ${subtle ? 'border-gray-100 text-gray-400' : 'border-gray-300'}`}>
+            <p className='pl-1 text-xl font-bold'>{date}</p>
         </div>
     );
 };
