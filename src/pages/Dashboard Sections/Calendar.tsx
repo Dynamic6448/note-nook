@@ -134,7 +134,7 @@ const CalendarDay: React.FC<{ date: Date; subtle?: boolean }> = ({ date, subtle 
     return (
         <div
             className={`w-full h-[140px] border-solid border-2 ${
-                subtle ? `${isToday ? 'border-blue-100' : 'border-gray-100'} text-gray-400` : `${isToday ? 'border-blue-300' : 'border-gray-300'}`
+                subtle ? `${isToday ? 'border-blue-200 bg-blue-50' : 'border-gray-100'} text-gray-400` : `${isToday ? 'border-blue-400 bg-blue-100' : 'border-gray-300'}`
             }`}
         >
             <p className='pl-1 text-xl font-bold'>{date.getDate()}</p>
