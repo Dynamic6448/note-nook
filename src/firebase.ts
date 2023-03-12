@@ -26,6 +26,10 @@ const getDateString = (date: Date) => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 };
 
+const getNoteDateString = (date: Date) => {
+    return `${getDateString(date)} at ${getTimeString(date)}`;
+};
+
 // #region Notes
 export const refNotes = (path?: string) => {
     return ref(db, `users/${auth.currentUser?.uid}/notes${path ? `/${path}` : ''}`);
@@ -34,7 +38,7 @@ export const createNote = (title: string, note: string) => {
     push(refNotes(), {
         title,
         note,
-        dateCreated: `${getDateString(new Date())} at ${getTimeString(new Date())}`,
+        dateCreated: getNoteDateString(new Date()),
     });
 };
 export const getNoteById: (id: string) => NoteType = (id: string) => {
@@ -67,7 +71,7 @@ export const setNoteById = (id: string, title: string, note: string) => {
         title,
         note,
         dateCreated,
-        dateUpdated: `${getDateString(new Date())} at ${getTimeString(new Date())}`,
+        dateUpdated: getNoteDateString(new Date()),
     });
 };
 export const deleteNote = (id: string) => {
@@ -91,7 +95,8 @@ export const refCalendarEvents = (path?: string) => {
 export const createCalendarEvent = (title: string, date: Date) => {
     push(refCalendarEvents(), {
         title,
-        date,
+        date: getDateString(date),
+        time: getTimeString(date),
     });
 };
 export const getCalendarEventById: (id: string) => CalendarEventType = (id: string) => {
@@ -104,10 +109,12 @@ export const getCalendarEventById: (id: string) => CalendarEventType = (id: stri
 
         Object.entries(data).forEach((event: any) => {
             if (event[0] === id) {
+                const [month, day, year] = event[1].date.split('/');
+                const [hours, minutes] = event[1].time.split(':');
                 foundEvent = {
                     id: event[0],
                     title: event[1].title,
-                    date: new Date(event[1].date),
+                    date: new Date(+year, +month - 1, +day, +hours, +minutes, 0, 0),
                 };
             }
         });
@@ -115,13 +122,11 @@ export const getCalendarEventById: (id: string) => CalendarEventType = (id: stri
 
     return foundEvent;
 };
-export const setCalendarEventById = (id: string, title: string) => {
-    const { date, time } = getCalendarEventById(id);
-
+export const setCalendarEventById = (id: string, title: string, date: Date) => {
     set(refCalendarEvents(id), {
         title,
-        date,
-        time,
+        date: getDateString(date),
+        time: getTimeString(date),
     });
 };
 export const deleteCalendarEvent = (id: string) => {
