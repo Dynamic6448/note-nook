@@ -19,8 +19,17 @@ export const db = getDatabase(app);
 export default app;
 //#endregion
 
+const getDate = (date: string, time: string) => {
+    const [month, day, year] = date.split('/');
+    const [hours, minutes] = time.split(':');
+    return new Date(+year, +month - 1, +day, +hours, +minutes.slice(0, 2), 0, 0);
+};
+export const dateEquals = (date1: Date, date2: Date) => {
+    return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+};
+
 const getTimeString = (date: Date) => {
-    return `${date.getHours() % 12 || 12}:${date.getMinutes()}${date.getHours() < 12 ? 'am' : 'pm'}`;
+    return `${date.getHours() % 12 || 12}:${date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()}${date.getHours() < 12 ? 'am' : 'pm'}`;
 };
 const getDateString = (date: Date) => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
@@ -99,6 +108,28 @@ export const createCalendarEvent = (title: string, date: Date) => {
         time: getTimeString(date),
     });
 };
+export const getAllCalendarEvents: () => CalendarEventType[] = () => {
+    const events: CalendarEventType[] = [];
+
+    onValue(refCalendarEvents(), (snapshot) => {
+        const data = snapshot.val();
+
+        if (!snapshot.exists()) return;
+
+        Object.entries(data).forEach((event: any) => {
+            const date = getDate(event[1].date, event[1].time);
+
+            events.push({
+                id: event[0],
+                title: event[1].title,
+                date: getDateString(date),
+                time: getTimeString(date),
+            });
+        });
+    });
+
+    return events;
+};
 export const getCalendarEventById: (id: string) => CalendarEventType = (id: string) => {
     let foundEvent: any = null;
 
@@ -109,18 +140,43 @@ export const getCalendarEventById: (id: string) => CalendarEventType = (id: stri
 
         Object.entries(data).forEach((event: any) => {
             if (event[0] === id) {
-                const [month, day, year] = event[1].date.split('/');
-                const [hours, minutes] = event[1].time.split(':');
+                const date = getDate(event[1].date, event[1].time);
+
                 foundEvent = {
                     id: event[0],
                     title: event[1].title,
-                    date: new Date(+year, +month - 1, +day, +hours, +minutes, 0, 0),
+                    date: getDateString(date),
+                    time: getTimeString(date),
                 };
             }
         });
     });
 
     return foundEvent;
+};
+export const getCalendarEventsByDate: (date: Date) => CalendarEventType[] = (date: Date) => {
+    const events: CalendarEventType[] = [];
+
+    onValue(refCalendarEvents(), (snapshot) => {
+        const data = snapshot.val();
+
+        if (!snapshot.exists()) return;
+
+        Object.entries(data).forEach((event: any) => {
+            const eventDate = getDate(event[1].date, event[1].time);
+
+            if (dateEquals(date, eventDate)) {
+                events.push({
+                    id: event[0],
+                    title: event[1].title,
+                    date: getDateString(eventDate),
+                    time: getTimeString(eventDate),
+                });
+            }
+        });
+    });
+
+    return events;
 };
 export const setCalendarEventById = (id: string, title: string, date: Date) => {
     set(refCalendarEvents(id), {

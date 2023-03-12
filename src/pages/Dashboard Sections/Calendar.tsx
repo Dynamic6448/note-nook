@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Page from '..';
+import { CalendarEventType, createCalendarEvent, dateEquals, getAllCalendarEvents } from '../../firebase';
 import { Button } from '../../components/Button';
 import { Modal } from '../../components/Modal';
-import { createCalendarEvent } from '../../firebase';
+import Page from '..';
 
 const getWeeksInMonth = (date: Date) => {
     const firstDay = new Date(date.setDate(1)).getDay();
@@ -77,6 +77,12 @@ const Calendar: React.FC = () => {
     const today = new Date();
     const [selectedMonth, setSelectedMonth] = useState(today);
 
+    const [eventList, setEventList] = useState<CalendarEventType[]>([]);
+
+    useEffect(() => {
+        setEventList(getAllCalendarEvents());
+    }, []);
+
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [createEventDate, setCreateEventDate] = useState(today);
 
@@ -122,9 +128,11 @@ const Calendar: React.FC = () => {
                         return (
                             <tr>
                                 {daysInWeek.map((day, j) => {
+                                    const events = eventList.filter((event) => dateEquals(new Date(event.date), day));
+
                                     return (
                                         <td className='w-[13.7rem]'>
-                                            <CalendarDay date={day} subtle={day.getMonth() !== selectedMonth.getMonth()} handleClickAdd={() => openCreateEventModal(day)} />
+                                            <CalendarDay date={day} subtle={day.getMonth() !== selectedMonth.getMonth()} handleClickAdd={() => openCreateEventModal(day)} events={events} />
                                         </td>
                                     );
                                 })}
@@ -138,7 +146,7 @@ const Calendar: React.FC = () => {
         </Page>
     );
 };
-const CalendarDay: React.FC<{ date: Date; subtle?: boolean; handleClickAdd: () => any }> = ({ date, subtle, handleClickAdd }) => {
+const CalendarDay: React.FC<{ date: Date; subtle?: boolean; handleClickAdd: () => any; events: CalendarEventType[] }> = ({ date, subtle, handleClickAdd, events }) => {
     const [isToday, setIsToday] = useState(false);
 
     useEffect(() => {
@@ -161,10 +169,12 @@ const CalendarDay: React.FC<{ date: Date; subtle?: boolean; handleClickAdd: () =
                 </div>
             </div>
             <div className='flex flex-col gap-1 text-sm px-1 pb-1'>
-                <div className={`flex justify-between ${subtle ? 'border-blue-200' : 'border-blue-400'} border-2 rounded-md px-1 cursor-pointer`}>
-                    <p>Example Event</p>
-                    <p>12:00am</p>
-                </div>
+                {events.map((event) => (
+                    <div className={`flex justify-between ${subtle ? 'border-blue-200' : 'border-blue-400'} border-2 rounded-md px-1 cursor-pointer`}>
+                        <p>{event.title}</p>
+                        <p>{event.time}</p>
+                    </div>
+                ))}
             </div>
         </div>
     );
