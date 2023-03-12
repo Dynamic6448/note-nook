@@ -19,11 +19,11 @@ export const db = getDatabase(app);
 export default app;
 //#endregion
 
+const getTimeString = (date: Date) => {
+    return `${date.getHours() % 12 || 12}:${date.getMinutes()}${date.getHours() < 12 ? 'am' : 'pm'}`;
+};
 const getDateString = (date: Date) => {
-    const hour = date.getHours() > 12 ? date.getHours() - 12 : date.getHours() === 0 ? 12 : date.getHours();
-    const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-    const ampm = date.getHours() >= 12 ? 'pm' : 'am';
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} at ${hour}:${minute}${ampm}`;
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 };
 
 // #region Notes
@@ -34,7 +34,7 @@ export const createNote = (title: string, note: string) => {
     push(refNotes(), {
         title,
         note,
-        dateCreated: getDateString(new Date()),
+        dateCreated: `${getDateString(new Date())} at ${getTimeString(new Date())}`,
     });
 };
 export const getNoteById: (id: string) => NoteType = (id: string) => {
@@ -67,7 +67,7 @@ export const setNoteById = (id: string, title: string, note: string) => {
         title,
         note,
         dateCreated,
-        dateUpdated: getDateString(new Date()),
+        dateUpdated: `${getDateString(new Date())} at ${getTimeString(new Date())}`,
     });
 };
 export const deleteNote = (id: string) => {
@@ -88,7 +88,7 @@ export const getCurrentEditingNote: () => NoteType = () => {
 export const refCalendarEvents = (path?: string) => {
     return ref(db, `users/${auth.currentUser?.uid}/calendar${path ? `/${path}` : ''}`);
 };
-export const createCalendarEvent = (title: string, date: string) => {
+export const createCalendarEvent = (title: string, date: Date) => {
     push(refCalendarEvents(), {
         title,
         date,
@@ -115,10 +115,13 @@ export const getCalendarEventById: (id: string) => CalendarEventType = (id: stri
 
     return foundEvent;
 };
-export const setCalendarEventById = (id: string, title: string, date: string) => {
+export const setCalendarEventById = (id: string, title: string) => {
+    const { date, time } = getCalendarEventById(id);
+
     set(refCalendarEvents(id), {
         title,
         date,
+        time,
     });
 };
 export const deleteCalendarEvent = (id: string) => {
@@ -147,5 +150,6 @@ export interface CalendarEventType {
     id: string;
     title: string;
     date: string;
+    time: string;
 }
 //#endregion

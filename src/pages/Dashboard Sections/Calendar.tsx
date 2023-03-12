@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Page from '..';
 import { Button } from '../../components/Button';
 import { Modal } from '../../components/Modal';
+import { createCalendarEvent } from '../../firebase';
 
 const getWeeksInMonth = (date: Date) => {
     const firstDay = new Date(date.setDate(1)).getDay();
@@ -160,7 +161,7 @@ const CalendarDay: React.FC<{ date: Date; subtle?: boolean; handleClickAdd: () =
                 </div>
             </div>
             <div className='flex flex-col gap-1 text-sm px-1 pb-1'>
-                <div className={`flex justify-between ${subtle ? 'border-blue-200' : 'border-blue-400'} border-2 rounded-md px-1`}>
+                <div className={`flex justify-between ${subtle ? 'border-blue-200' : 'border-blue-400'} border-2 rounded-md px-1 cursor-pointer`}>
                     <p>Example Event</p>
                     <p>12:00am</p>
                 </div>
@@ -170,22 +171,32 @@ const CalendarDay: React.FC<{ date: Date; subtle?: boolean; handleClickAdd: () =
 };
 const CreateCalendarEventModal: React.FC<{ show: boolean; handleClose: () => any; date: Date }> = ({ show, handleClose, date }) => {
     const [title, setTitle] = useState('');
-    const [dateTime, setDateTime] = useState(date);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
+    };
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        date.setHours(parseInt(e.target.value.split(':')[0]));
+        date.setMinutes(parseInt(e.target.value.split(':')[1]));
+    };
+
+    const handleCreate = () => {
+        createCalendarEvent(title, date);
+        handleClose();
     };
 
     return (
         <Modal title={`Create Event - ${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`} show={show}>
             <div className='mb-6'>
                 <input type='text' placeholder='Title' className='w-full p-2 border-2 border-gray-300 rounded-lg' onChange={handleTitleChange} />
+                <input type='time' placeholder='12:00 AM' className='w-full p-2 border-2 border-gray-300 rounded-lg mt-2' onChange={handleTimeChange} />
             </div>
             <div className='flex flex-row w-full items-center justify-between'>
                 <Button className='bg-slate-600 hover:bg-slate-700 text-[1rem]' onClick={handleClose}>
                     Cancel
                 </Button>
-                <Button className='bg-blue-600 hover:bg-blue-700 text-[1rem]' onClick={() => console.log('created event')}>
+                <Button className='bg-blue-600 hover:bg-blue-700 text-[1rem]' onClick={handleCreate}>
                     Create
                 </Button>
             </div>
